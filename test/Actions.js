@@ -1,7 +1,22 @@
 import Actions from './../src/Actions';
 import test from 'tape';
 
-test('Actions() is extendable', (t) => {
-    t.ok(typeof Actions == 'function', 'Action is a function');
+class FooActions extends Actions {
+    foo() {
+        this.emit('foo')
+    }
+}
+
+test('Actions', (t) => {
+    t.ok(typeof Actions == 'function', 'should be a function');
+    t.end();
+});
+
+test('Actions() emit events', (t) => {
+    var fooEmitted = false;
+    var fooActions = new FooActions();
+    fooActions.on('foo', () => {fooEmitted = true});
+    fooActions.foo();
+    t.ok(fooEmitted === true, 'should emit an event');
     t.end();
 });

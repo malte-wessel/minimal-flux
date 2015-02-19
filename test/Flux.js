@@ -8,23 +8,23 @@ var flux = new Flux({
     stores: {foo: Store}
 });
 
-test('Flux() is extendable', (t) => {
-    t.ok(typeof Flux == 'function', 'Flux is a function');
+test('Flux', (t) => {
+    t.ok(typeof Flux == 'function', 'should be a function');
     t.end();
 });
 
-test('Flux() will create actions and stores', (t) => {
-    t.ok(flux.actions.foo instanceof Actions, 'creates actions');
-    t.ok(flux.stores.foo instanceof Store, 'creates stores');
+test('Flux()', (t) => {
+    t.ok(flux.actions.foo instanceof Actions, 'should creates actions');
+    t.ok(flux.stores.foo instanceof Store, 'should creates stores');
     t.end();
 });
 
-test('flux#getActions() returns actions', (t) => {
-    t.ok(flux.getActions('foo') instanceof Actions, 'returns actions');
+test('flux#getActions()', (t) => {
+    t.ok(flux.getActions('foo') instanceof Actions, 'should returns actions');
     t.end();
 });
 
 test('flux#getStores() returns stores', (t) => {
-    t.ok(flux.getStore('foo') instanceof Store, 'returns store');
+    t.ok(flux.getStore('foo') instanceof Store, 'should returns store');
     t.end();
 });

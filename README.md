@@ -17,7 +17,7 @@ WIP
 
 ##Examples
 
-You can find a todo example in `examples/todo/`. Run the following command in the `examples/todo/` directory:
+You can find an example in `examples/todo`. Run the following commands in the `examples/todo/ directory:
 
 ````
 npm install

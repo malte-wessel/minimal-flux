@@ -1,5 +1,5 @@
 import uniqueid from 'uniqueid';
-import Store from '../../../../src/Store';
+import { Store } from 'minimal-flux';
 import flux from '../flux';
 
 export default class TodoStore extends Store {

@@ -11,13 +11,13 @@ A very lightweight implementation of Flux
 npm install minimal-flux --save
 ````
 
-##Documentation
+## Documentation
 
 WIP
 
-##Examples
+## Examples
 
-You can find an example in `examples/todo`. Run the following commands in the `examples/todo/ directory:
+You can find an example in `examples/todo/`. Run the following commands in the `examples/todo/` directory:
 
 ````
 npm install

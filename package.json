@@ -1,6 +1,6 @@
 {
   "name": "minimal-flux",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "A very lightweight implementation of Flux",
   "main": "dist/index.js",
    "bugs": {

@@ -3,6 +3,14 @@
   "version": "0.1.0",
   "description": "A very lightweight implementation of Flux",
   "main": "dist/index.js",
+   "bugs": {
+    "url": "https://github.com/malte-wessel/minimal-flux/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/malte-wessel/minimal-flux.git"
+  },
+  "homepage": "https://github.com/malte-wessel/minimal-flux",
   "scripts": {
     "build": "./node_modules/.bin/babel ./src --out-dir ./dist",
     "test": "./node_modules/.bin/babel-node ./node_modules/.bin/tape test/*.js"
@@ -17,6 +25,13 @@
     "eventemitter3": "^0.1.6",
     "object-assign": "^2.0.0"
   },
+  "keywords": [
+    "flux",
+    "lightweight",
+    "react",
+    "flow",
+    "unidirectional"
+  ],
   "testling": {
     "files": "test/*.js",
     "browsers": [

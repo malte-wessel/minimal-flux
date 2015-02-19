@@ -1,4 +1,4 @@
-import Flux from './../../../src/Flux';
+import Flux from 'minimal-flux';
 import TodoActions from './actions/TodoActions';
 import TodoStore from './stores/TodoStore';
 

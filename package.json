@@ -13,6 +13,7 @@
     "tape": "^3.5.0"
   },
   "dependencies": {
+    "eventemitter3": "^0.1.6",
     "object-assign": "^2.0.0"
   }
 }

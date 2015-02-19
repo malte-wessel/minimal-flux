@@ -21,7 +21,7 @@ You can find an example in `examples/todo/`. Run the following commands in the `
 
 ````
 npm install
-npm build
+npm run build
 ````
 
 Then open index.html in your browser.

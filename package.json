@@ -1,9 +1,10 @@
 {
   "name": "minimal-flux",
   "version": "0.1.0",
-  "description": "",
-  "main": "index.js",
+  "description": "A very lightweight implementation of Flux",
+  "main": "dist/index.js",
   "scripts": {
+    "build": "./node_modules/.bin/babel ./src --out-dir ./dist",
     "test": "./node_modules/.bin/babel-node ./node_modules/.bin/tape test/*.js"
   },
   "author": "Malte Wessel <delabreak@gmail.com>",

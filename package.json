@@ -1,17 +1,16 @@
 {
-  "name": "simple-flux",
+  "name": "minimal-flux",
   "version": "0.1.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "./node_modules/.bin/babel-node ./node_modules/.bin/tape test/*.js"
   },
   "author": "Malte Wessel <delabreak@gmail.com>",
   "license": "MIT",
   "devDependencies": {
     "babel": "^4.3.0",
-    "browserify": "^8.1.3",
-    "watchify": "^2.3.0"
+    "tape": "^3.5.0"
   },
   "dependencies": {
     "object-assign": "^2.0.0"

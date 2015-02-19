@@ -4,12 +4,12 @@ import TodoStore from './stores/TodoStore';
 
 export default new Flux({
 
-	actions: {
-		todos: TodoActions
-	},
+    actions: {
+        todos: TodoActions
+    },
 
-	stores: {
-		todos: TodoStore
-	}
+    stores: {
+        todos: TodoStore
+    }
 
 });

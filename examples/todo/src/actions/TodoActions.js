@@ -14,6 +14,8 @@ export default class TodoActions extends Actions {
                 {id: uniqueid(), title: 'Drop Backbone'},
                 {id: uniqueid(), title: 'Travel'},
             ];
+            
+            // Invoke complete action
             this.fetchCompleted(data);
         }, 500);
     }

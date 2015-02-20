@@ -17,7 +17,6 @@
     "watchify": "^2.3.0"
   },
   "dependencies": {
-    "minimal-flux": "0.1.*",
     "uniqueid": "^0.1.0"
   }
 }

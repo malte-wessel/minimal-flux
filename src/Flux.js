@@ -1,10 +1,67 @@
-function createActions(actions) {
-    for(let key in actions) actions[key] = new actions[key](this);
+function createNamespacedActions(actions) {
+    for(let key in actions) actions[key] = new actions[key]();
     return actions;
 }
 
-function createStores(stores) {
-    for(let key in stores) stores[key] = new stores[key](this);
+function createNamespacedStores(stores) {
+    for(let key in stores) stores[key] = new stores[key]();
+    return stores;
+}
+
+function wrapNamespacedActions(actions) {
+    var wrapped = {};
+    for(let key in actions) wrapped[key] = wrapActions(actions[key]);
+    return wrapped;
+}
+
+function wrapNamespacedActionsEmitter(actions) {
+    var wrapped = {};
+    for(let key in actions) wrapped[key] = wrapActionsEmitter(actions[key]);
+    return wrapped;
+}
+
+function wrapNamespacedStores(store) {
+    var wrapped = {};
+    for(let key in store) wrapped[key] = wrapStore(store[key]);
+    return wrapped;
+}
+
+function wrapActions(actions) {
+    let wrapped = {};
+    for(let method of getMethodNames(actions.constructor.prototype)) {
+        wrapped[method] = actions[method].bind(actions);
+    }
+    return wrapped;
+}
+
+function wrapActionsEmitter(actions) {
+    let wrapped = {};
+    wrapped.addListener = actions.addListener.bind(actions);
+    wrapped.removeListener = actions.removeListener.bind(actions);
+    return wrapped;
+}
+
+function getMethodNames(instance) {
+    return Object.getOwnPropertyNames(instance)
+        .filter(name => name !== 'constructor' && 
+            typeof instance[name] === 'function');
+}
+
+function wrapStore(store) {
+    let wrapped = {};
+    wrapped.addListener = store.addListener.bind(store);
+    wrapped.removeListener = store.removeListener.bind(store);
+    wrapped.getState = store.getState.bind(store);
+    return wrapped;
+}
+
+function invokeStoreDidMount(stores, wrappedActions, wrappedStores) {
+    for(let key in stores) {
+        let store = stores[key];
+        if(typeof store.storeDidMount === 'function') {
+            store.storeDidMount.call(store, wrappedActions, wrappedStores);
+        }
+    }
     return stores;
 }
 
@@ -16,8 +73,17 @@ export default class Flux {
      * @return {Flux}
      */
     constructor(options) {
-        this.actions = createActions(options.actions);
-        this.stores = createStores(options.stores);
+        let actions = createNamespacedActions(options.actions);
+        let stores = createNamespacedStores(options.stores);
+
+        let wrappedActions = wrapNamespacedActions(actions);
+        let wrappedStores = wrapNamespacedStores(stores);
+        let actionEmitters = wrapNamespacedActionsEmitter(actions);
+
+        this.actions = wrappedActions;
+        this.stores = wrappedStores;
+
+        invokeStoreDidMount(stores, actionEmitters, wrappedStores);
     }
 
     /**

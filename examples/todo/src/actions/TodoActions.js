@@ -1,5 +1,5 @@
 import uniqueid from 'uniqueid';
-import { Actions } from 'minimal-flux';
+import Actions from '../../../../src/Actions';
 
 export default class TodoActions extends Actions {
 

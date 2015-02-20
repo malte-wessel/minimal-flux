@@ -38,7 +38,7 @@ export default class App extends React.Component {
                     <button onClick={this.onClickDone.bind(this, todo.id)}>Done</button>
                 </li>
             );
-        })
+        });
 
         var todos = this.state.waiting ? <p>Loading...</p> : <ul>{items}</ul>;
 

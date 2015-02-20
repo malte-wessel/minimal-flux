@@ -1,22 +1,21 @@
 import uniqueid from 'uniqueid';
-import { Store } from 'minimal-flux';
-import flux from '../flux';
+import Store from '../../../../src/Store';
 
 export default class TodoStore extends Store {
 
-    constructor(flux) {
-        var todoActions = flux.getActions('todos');
-        
+    storeDidMount(actions, stores) {
+        var todoActions = actions.todos;
+
         todoActions.addListener('fetchWait', this.onFetchWait.bind(this));
         todoActions.addListener('fetchCompleted', this.onFetchCompleted.bind(this));
         todoActions.addListener('fetchFailed', this.onFetchFailed.bind(this));
 
         todoActions.addListener('create', this.onCreate.bind(this));
-        todoActions.addListener('destroy', this.onDestroy.bind(this));
+        todoActions.addListener('destroy', this.onDestroy.bind(this));        
 
         this.setState({
             todos: []
-        })
+        });
     }
 
     onFetchWait() {

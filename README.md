@@ -15,6 +15,9 @@ npm install minimal-flux --save
 
 WIP
 
+![](https://github.com/malte-wessel/minimal-flux/blob/master/docs/images/overview.png)
+
+
 ## Examples
 
 You can find an example in `examples/todo/`. Run the following commands in the `examples/todo/` directory:

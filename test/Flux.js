@@ -3,9 +3,17 @@ import Actions from './../src/Actions';
 import Store from './../src/Store';
 import test from 'tape';
 
+class FooActions extends Actions {
+    bar() {
+        this.emit('bar');
+    }
+}
+
+class FooStore extends Store {}
+
 var flux = new Flux({
-    actions: {foo: Actions},
-    stores: {foo: Store}
+    actions: {foo: FooActions},
+    stores: {foo: FooStore}
 });
 
 test('Flux', (t) => {
@@ -14,17 +22,17 @@ test('Flux', (t) => {
 });
 
 test('Flux()', (t) => {
-    t.ok(flux.actions.foo instanceof Actions, 'should creates actions');
-    t.ok(flux.stores.foo instanceof Store, 'should creates stores');
+    t.ok(typeof flux.actions.foo.bar == 'function', 'should creates actions');
+    t.ok(typeof flux.stores.foo.getState == 'function', 'should creates stores');
     t.end();
 });
 
 test('flux#getActions()', (t) => {
-    t.ok(flux.getActions('foo') instanceof Actions, 'should returns actions');
+    t.ok(typeof flux.getActions('foo').bar == 'function', 'should returns actions');
     t.end();
 });
 
 test('flux#getStores() returns stores', (t) => {
-    t.ok(flux.getStore('foo') instanceof Store, 'should returns store');
+    t.ok(typeof flux.getStore('foo').getState == 'function', 'should returns store');
     t.end();
 });

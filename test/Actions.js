@@ -3,7 +3,7 @@ import test from 'tape';
 
 class FooActions extends Actions {
     foo() {
-        this.emit('foo')
+        this.emit('foo');
     }
 }
 
@@ -15,7 +15,7 @@ test('Actions', (t) => {
 test('Actions() emit events', (t) => {
     var fooEmitted = false;
     var fooActions = new FooActions();
-    fooActions.on('foo', () => {fooEmitted = true});
+    fooActions.on('foo', () => {fooEmitted = true;});
     fooActions.foo();
     t.ok(fooEmitted === true, 'should emit an event');
     t.end();

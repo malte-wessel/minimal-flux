@@ -35,10 +35,10 @@ function wrapActions(actions) {
 }
 
 function wrapActionsEmitter(actions) {
-    let wrapped = {};
-    wrapped.addListener = actions.addListener.bind(actions);
-    wrapped.removeListener = actions.removeListener.bind(actions);
-    return wrapped;
+    return {
+        addListener: actions.addListener.bind(actions),
+        removeListener: actions.removeListener.bind(actions)
+    };
 }
 
 function getMethodNames(instance) {
@@ -48,11 +48,11 @@ function getMethodNames(instance) {
 }
 
 function wrapStore(store) {
-    let wrapped = {};
-    wrapped.addListener = store.addListener.bind(store);
-    wrapped.removeListener = store.removeListener.bind(store);
-    wrapped.getState = store.getState.bind(store);
-    return wrapped;
+    return {
+        addListener: store.addListener.bind(store),
+        removeListener: store.removeListener.bind(store),
+        getState: store.getState.bind(store)
+    };
 }
 
 function invokeStoreDidMount(stores, wrappedActions, wrappedStores) {

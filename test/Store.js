@@ -1,28 +1,65 @@
-import Store from './../src/Store';
 import test from 'tape';
+import Dispatcher from './../src/Dispatcher';
+import Actions from './../src/Actions';
+import Store from './../src/Store';
 
-class FooStore extends Store {}
+let handleFooBarCalled = false;
+let handleFooBazCalled = false;
 
-test('Store() is extendable', (t) => {
-    t.ok(typeof Store == 'function', 'Store is a function');
-    t.end();
+class FooStore extends Store {
+	constructor(actions) {
+		this.listenTo(actions.foo.bar, this.handleFooBar);
+		this.listenTo(actions.foo.baz, this.handleFooBaz);
+		this.stopListenTo(actions.foo.baz);
+	}
+	handleFooBar(bar) {
+		handleFooBarCalled = true;
+		this.setState({bar: bar});
+		console.log('handleFooBar');
+	}
+	handleFooBaz(baz) {
+		handleFooBazCalled = true;
+	}
+}
+
+class FooActions extends Actions {
+	bar(bar) {
+		return bar;
+	}
+	baz(baz) {
+		return baz;
+	}
+}
+
+let flux = new Dispatcher({
+	actions: {foo: FooActions},
+	stores: {foo: FooStore}
 });
 
-test('actions#setState()', (t) => {
-    var changeEmitted = false;
-    var store = new FooStore();
-    store.on('change', () => {changeEmitted = true});
-    store.setState({foo: 'bar'});
-
-    t.deepEqual(store.state, {foo: 'bar'}, 'should update state');
-    t.ok(changeEmitted === true, 'should emit change event');
-    t.end();
+test('Store:listenTo()', (t) => {
+	handleFooBarCalled = false;
+	let action = flux.getActions('foo').bar;
+	action();
+	t.ok(handleFooBarCalled, 'should listen to action');
+	t.end();
 });
 
-test('actions#getState()', (t) => {
-    var store = new FooStore();
-    store.setState({foo: 'bar'});
-    var state = store.getState();
-    t.deepEqual(state, {foo: 'bar'}, 'should return state');
-    t.end();
+test('Store:stopListenTo()', (t) => {
+	handleFooBazCalled = false;
+	let action = flux.getActions('foo').baz;
+	action();
+	t.notOk(handleFooBazCalled, 'should stop listen to action');
+	t.end();
+});
+
+test('Store:setState()', (t) => {
+	let emitted = false;
+	let action = flux.getActions('foo').bar;
+	let store = flux.getStore('foo');
+	store.on('change', () => emitted = true);
+	action('bar');
+
+	t.deepEqual(store.getState(), {bar: 'bar'}, 'should set state');
+	t.ok(emitted, 'should emit change event');
+	t.end();
 });

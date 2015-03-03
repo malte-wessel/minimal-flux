@@ -3,28 +3,23 @@ import Store from '../../../../src/Store';
 
 export default class TodoStore extends Store {
 
-    storeDidMount(actions, stores) {
-        var todoActions = actions.todos;
+    constructor(actions) {
+        this.listenTo(actions.todos.wait, this.handleWait);
+        this.listenTo(actions.todos.completed, this.handleCompleted);
+        this.listenTo(actions.todos.failed, this.handleFailed);
+        this.listenTo(actions.todos.create, this.handleCreate);
+        this.listenTo(actions.todos.destroy, this.handleDestroy);
 
-        todoActions.addListener('fetchWait', this.onFetchWait.bind(this));
-        todoActions.addListener('fetchCompleted', this.onFetchCompleted.bind(this));
-        todoActions.addListener('fetchFailed', this.onFetchFailed.bind(this));
-
-        todoActions.addListener('create', this.onCreate.bind(this));
-        todoActions.addListener('destroy', this.onDestroy.bind(this));        
-
-        this.setState({
-            todos: []
-        });
+        this.setState({todos: []});
     }
 
-    onFetchWait() {
+    handleWait() {
         this.setState({
             waiting: true
         });
     }
 
-    onFetchCompleted(todos) {
+    handleCompleted(todos) {
         this.setState({
             todos: todos, 
             waiting: undefined,
@@ -32,20 +27,20 @@ export default class TodoStore extends Store {
         });
     }
 
-    onFetchFailed(err) {
+    handleFailed(err) {
         this.setState({
             waiting: undefined, 
             error: err
         });
     }
 
-    onCreate(title) {
+    handleCreate(title) {
         var todos = this.getState().todos;
         todos.push({id: uniqueid(), title: title});
         this.setState({todos: todos});
     }
 
-    onDestroy(id) {
+    handleDestroy(id) {
         var todos = this.getState().todos;
         var todo = todos.filter((t) => t.id == id).shift();
         var idx = todos.indexOf(todo);

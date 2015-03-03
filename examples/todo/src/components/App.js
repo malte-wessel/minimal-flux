@@ -14,8 +14,7 @@ export default class App extends React.Component {
 
     componentDidMount() {
         todoStore.addListener('change', this.setState.bind(this));
-        todoStore.addListener('change', (state) => console.log(state));
-
+        todoStore.addListener('change', (s) => console.log(s));
         todoActions.fetch();
     }
 

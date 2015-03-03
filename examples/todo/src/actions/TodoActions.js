@@ -5,7 +5,7 @@ export default class TodoActions extends Actions {
 
     fetch() {
         // Invoke wait action
-        this.fetchWait();
+        this.wait();
 
         // Pretend web api call
         setTimeout(() => {
@@ -16,27 +16,27 @@ export default class TodoActions extends Actions {
             ];
             
             // Invoke complete action
-            this.fetchCompleted(data);
+            this.completed(data);
         }, 500);
     }
 
-    fetchWait() {
-        this.emit('fetchWait');
+    wait() {
+        return;
     }
 
-    fetchCompleted(data) {
-        this.emit('fetchCompleted', data);
+    completed(data) {
+       return data;
     }
 
-    fetchFailed(err) {
-        this.emit('fetchFailed', err);
+    failed(err) {
+        return err;
     }
 
     create(title) {
-        this.emit('create', title);
+        return title;
     }
 
     destroy(id) {
-        this.emit('destroy', id);
+        return id;
     }
 }

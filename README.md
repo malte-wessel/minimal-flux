@@ -13,14 +13,12 @@ npm install minimal-flux --save
 
 ## Documentation
 
-WIP
-
-![](https://github.com/malte-wessel/minimal-flux/blob/master/docs/images/overview.png)
+Work in progess. Have a look at the examples & tests!
 
 
 ## Examples
 
-You can find an example in `examples/todo/`. Run the following commands in the `examples/todo/` directory:
+You can find some examples in `examples/`. Run the following commands in the `examples/<example>/` directory:
 
 ````
 npm install

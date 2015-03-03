@@ -41,6 +41,7 @@ export default class Dispatcher {
     }
 
     createActions(actions) {
+        let obj = {};
         for(let key in actions) {
             let Actions = actions[key];
 
@@ -55,7 +56,11 @@ export default class Dispatcher {
             this.actionsDecorators[key] = {};
 
             for(let action of getAllPropertyNames(actionsInstance)) {
+                // Ignore object prototype functions
+                if(obj[action]) continue;
+                // Ignore constructor
                 if(action === 'constructor') continue;
+                // Ignore getter
                 if(action === 'getActions') continue;
                 if(typeof actionsInstance[action] !== 'function') continue;
 
@@ -112,7 +117,7 @@ export default class Dispatcher {
                 if(prop === 'constructor' || prop === 'getStore' || prop === 'getActions') continue;
                 if(typeof fn !== 'function') continue;
 
-                if(prop.startsWith('get') || eventEmitterMethods.indexOf(prop) > -1) {
+                if(prop.indexOf('get') === 0 || eventEmitterMethods.indexOf(prop) > -1) {
                     decorator[prop] = store[prop].bind(store);    
                 }
             }

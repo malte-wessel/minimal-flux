@@ -1,5 +1,3 @@
-'use strict';
-
 import Flux from './Flux';
 import Actions from './Actions';
 import Store from './Store';

@@ -1,4 +1,4 @@
-import BaseFlux from './Dispatcher';
+import Dispatcher from './Dispatcher';
 
 export default class Flux extends Dispatcher {
 

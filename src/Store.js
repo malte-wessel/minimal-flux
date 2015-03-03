@@ -18,7 +18,7 @@ export default class Store extends EventEmitter {
         if(!state) return;
         if(!this.state) this.state = {};
         this.state = assign({}, this.state, state);
-        this.emit('change', this);
+        this.emit('change', this.state);
     }
 
     getState() {

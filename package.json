@@ -14,7 +14,7 @@
   "scripts": {
     "build": "./node_modules/.bin/babel ./src --out-dir ./dist",
     "test": "./node_modules/.bin/babel-node ./node_modules/.bin/tape test/*.js",
-    "prepublish": "npm test"
+    "prepublish": "npm test && npm run build"
   },
   "author": "Malte Wessel <delabreak@gmail.com>",
   "license": "MIT",

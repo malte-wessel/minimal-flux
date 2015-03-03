@@ -2,3 +2,5 @@ node_modules
 examples/todo/build.js
 npm-debug.log
 dist
+examples/todo/build.js
+examples/chat/build.js

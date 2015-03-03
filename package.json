@@ -3,7 +3,7 @@
   "version": "0.2.1",
   "description": "A very lightweight implementation of Flux",
   "main": "dist/index.js",
-   "bugs": {
+  "bugs": {
     "url": "https://github.com/malte-wessel/minimal-flux/issues"
   },
   "repository": {
@@ -24,7 +24,9 @@
   },
   "dependencies": {
     "eventemitter3": "^0.1.6",
-    "object-assign": "^2.0.0"
+    "getallpropertynames": "^0.1.1",
+    "object-assign": "^2.0.0",
+    "toposort": "^0.2.10"
   },
   "keywords": [
     "flux",

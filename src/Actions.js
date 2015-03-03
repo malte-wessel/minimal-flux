@@ -1,5 +1,3 @@
-import { EventEmitter } from 'eventemitter3';
+'use strict';
 
-export default class Actions extends EventEmitter {
-
-}
+export default class Actions {}

@@ -24,10 +24,10 @@ class FooStore extends Store {
 
 class FooActions extends Actions {
 	bar(bar) {
-		return bar;
+		this.emit('bar', bar);
 	}
 	baz(baz) {
-		return baz;
+		this.emit('baz', baz);
 	}
 }
 

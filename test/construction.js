@@ -8,7 +8,7 @@ let actionsCalled = [];
 class FooActions extends Actions {
     foo(a) {
         actionsCalled.push('foo.foo');
-        return a;
+        this.emit('foo', a);
     }
     foo2(a) {
         actionsCalled.push('foo.foo2');
@@ -16,11 +16,11 @@ class FooActions extends Actions {
     }
     foo3(a) {
         actionsCalled.push('foo.foo3');
-        return a;
+        this.emit('foo3', a);
     }
     foo4(a, b, c) {
         actionsCalled.push('foo.foo4');
-        return {a, b, c};
+        this.emit('foo', a, b, c);
     }
 }
 
@@ -34,7 +34,7 @@ class BarActions extends Actions {
 class Bar2Actions extends BarActions {
     bar2() {
         actionsCalled.push('bar2.bar2');
-        return 'bar2';
+        this.emit('bar2');
     }
 }
 
@@ -109,7 +109,7 @@ test('construction:actions: action getter for actions instance', (t) => {
 
 test('construction:actions: call own actions', (t) => {
     actionsCalled = [];
-    flux.getActions('foo').foo2();
+    flux.getActions('foo').foo2('foo2');
     t.deepEqual(actionsCalled, ['foo.foo2', 'foo.foo3'], 'should invoke own actions');
     t.end();
 });
@@ -125,7 +125,8 @@ test('construction:actions: decorators', (t) => {
     let fooActionsDecorator = flux.getActions('foo');
     let fooActions = flux.actions.foo;
     t.notOk(fooActionsDecorator instanceof FooActions, 'should decorate actions');
-    t.deepEqual(Object.keys(fooActionsDecorator), Object.keys(fooActions), 'should decorate each action');
+    t.deepEqual(Object.keys(fooActionsDecorator), ['foo', 'foo2', 'foo3', 'foo4'], 'should decorate each action');
+    t.notOk(typeof fooActionsDecorator.addListener === 'function', 'should not decorate eventemitter functions');
     t.end();
 });
 

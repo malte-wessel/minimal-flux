@@ -38,7 +38,9 @@ class BazStore extends Store {
 }
 
 class FooActions extends Actions {
-	bar(bar) { return bar; }
+	bar(bar) {
+		this.emit('bar', bar);
+	}
 }
 
 let flux = new Dispatcher({

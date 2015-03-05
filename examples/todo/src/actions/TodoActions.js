@@ -21,22 +21,22 @@ export default class TodoActions extends Actions {
     }
 
     wait() {
-        return;
+        this.emit('wait');
     }
 
     completed(data) {
-       return data;
+       this.emit('completed', data);
     }
 
     failed(err) {
-        return err;
+        this.emit('failed', err);
     }
 
     create(title) {
-        return title;
+        this.emit('create', title);
     }
 
     destroy(id) {
-        return id;
+        this.emit('destroy', id);
     }
 }

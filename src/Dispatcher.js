@@ -30,13 +30,11 @@ export default class Dispatcher {
 
     dispatch(actionId, ...args) {
         let stores = this.stores;
-        let action = this.actionsById[actionId];
-        let result = action(...args);
-
+        
         for (let key of this.order) {
             let handlers = stores[key]._handlers;
             if(!handlers || !handlers[actionId]) continue;
-            handlers[actionId](result);
+            handlers[actionId](...args);
         }
     }
 
@@ -58,6 +56,7 @@ export default class Dispatcher {
             for(let action of getAllPropertyNames(actionsInstance)) {
                 // Ignore object prototype functions
                 if(obj[action]) continue;
+                if(eventEmitterMethods.indexOf(action) > -1) continue;
                 // Ignore constructor
                 if(action === 'constructor') continue;
                 // Ignore getter
@@ -65,11 +64,13 @@ export default class Dispatcher {
                 if(typeof actionsInstance[action] !== 'function') continue;
 
                 let actionId = 'a' + actionIds++;
-                let actionFn = actionsInstance[action];
+                let actionFn = actionsInstance[action].bind(actionsInstance);
+
+                actionsInstance.addListener(action, this.dispatch.bind(this, actionId));
 
                 this.actionIds[key][action] = actionId;
-                this.actionsById[actionId] = actionFn.bind(actionsInstance);
-                actionsInstance[action] = this.actionsDecorators[key][action] = this.dispatch.bind(this, actionId);
+                this.actionsById[actionId] = actionFn;
+                this.actionsDecorators[key][action] = actionFn;
             }
         }
     }
@@ -94,13 +95,9 @@ export default class Dispatcher {
 
         for(let i = 0, l = order.length; i < l; i++){
             let key = order[i];
-            let storeDeps = [];
             let Store = stores[key];
 
-            if(Array.isArray(Store)) {
-                storeDeps = Store.slice(1);
-                Store = Store[0];   
-            }
+            if(Array.isArray(Store)) Store = Store[0];   
 
             assign(Store.prototype, {
                 getStore: this.getStore.bind(this),

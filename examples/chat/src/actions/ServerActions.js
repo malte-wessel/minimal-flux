@@ -3,11 +3,11 @@ import Actions from '../../../../src/Actions';
 export default class MessageActions extends Actions {
 
 	receiveAll(rawMessages) {
-		return rawMessages;
+		this.emit('receiveAll', rawMessages);
 	}
 
     receiveCreatedMessage(createdMessage) {
-        return createdMessage;
+    	this.emit('receiveCreatedMessage', createdMessage);
     }
 
 }

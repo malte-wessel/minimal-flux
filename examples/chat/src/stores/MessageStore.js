@@ -14,8 +14,8 @@ export default class MessageStore extends Store {
         this.markAllInThreadRead(this.getStore('threads').getCurrentId());
     }
 
-    handleCreateMessage(message) {
-        this.addMessage(message.text, message.threadId);
+    handleCreateMessage(text, threadId) {
+        this.addMessage(text, threadId);
     }
 
     handleReceiveAll(rawMessages) {

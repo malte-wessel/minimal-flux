@@ -11,8 +11,8 @@ import UnreadStore from './stores/UnreadStore';
 export default new Flux({
 
     actions: {
-    	server: ServerActions,
-    	threads: ThreadActions,
+        server: ServerActions,
+        threads: ThreadActions,
         messages: MessageActions
     },
 

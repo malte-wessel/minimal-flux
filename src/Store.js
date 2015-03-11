@@ -2,18 +2,18 @@ import { EventEmitter } from 'eventemitter3';
 import assign from 'object-assign';
 
 export default class Store extends EventEmitter {
-	
+    
     /**
      * Register an action handler
      * @param  {String}   id      Id of the action (e.g. 'todos.create')
      * @param  {Function} handler Action handler
      * @return {void}
      */
-	handleAction(id, handler) {
-		if (typeof handler !== 'function') return;
-		if(!this._handlers) this._handlers = {};	
-		this._handlers[id] = handler.bind(this);
-	}
+    handleAction(id, handler) {
+        if (typeof handler !== 'function') return;
+        if(!this._handlers) this._handlers = {};    
+        this._handlers[id] = handler.bind(this);
+    }
 
     /**
      * Unregister an action handler

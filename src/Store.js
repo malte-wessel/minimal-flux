@@ -3,15 +3,15 @@ import assign from 'object-assign';
 
 export default class Store extends EventEmitter {
 	
-	listenTo(actionId, handler) {
+	handleAction(id, handler) {
 		if (typeof handler !== 'function') return;
 		if(!this._handlers) this._handlers = {};	
-		this._handlers[actionId] = handler.bind(this);
+		this._handlers[id] = handler.bind(this);
 	}
 
-    stopListenTo(actionId) {
-        if(!this._handlers || !this._handlers[actionId]) return;
-        this._handlers[actionId] = undefined;
+    stopHandleAction(id) {
+        if(!this._handlers || !this._handlers[id]) return;
+        this._handlers[id] = undefined;
     }
 
     setState(state) {

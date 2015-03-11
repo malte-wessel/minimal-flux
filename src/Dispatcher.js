@@ -2,24 +2,20 @@ import assign from 'object-assign';
 import { EventEmitter } from 'eventemitter3';
 import toposort from 'toposort';
 import getAllPropertyNames from 'getallpropertynames';
+import Actions from './Actions';
+import Store from './Store';
 
-let actionIds = 0;
-let eventEmitterMethods = Object.keys(EventEmitter.prototype).filter(k => typeof EventEmitter.prototype[k] === 'function');
-
-function keys(obj) {
-    return Object.keys(obj);
-}
+let allActionsProperties = getAllPropertyNames(Actions.prototype);
+let allStoreProperties = getAllPropertyNames(Store.prototype);
+let eventEmitterProperties = Object.keys(EventEmitter.prototype);
 
 export default class Dispatcher {
 
     constructor(options) {
         this.actions = {};
-        this.actionIds = {};
-        this.actionsById = {};
-        this.actionsDecorators = {};
-
         this.stores = {};
-        this.storeDecorators = {};
+        this._stores = {};
+        this.order = [];
 
         let actions = options.actions || {};
         let stores = options.stores || {};
@@ -29,7 +25,7 @@ export default class Dispatcher {
     }
 
     dispatch(actionId, ...args) {
-        let stores = this.stores;
+        let stores = this._stores;
         
         for (let key of this.order) {
             let handlers = stores[key]._handlers;
@@ -39,38 +35,27 @@ export default class Dispatcher {
     }
 
     createActions(actions) {
-        let obj = {};
         for(let key in actions) {
-            let Actions = actions[key];
 
-            assign(Actions.prototype, {
-                getActions: this.getActions.bind(this)
+            let Actions = actions[key];
+            assign(Actions.prototype, { actions: this.actions });
+
+            let instance = new Actions();
+
+            this.actions[key] = {};
+
+            let props = getAllPropertyNames(instance).filter((prop) => {
+                // Ignore the base class properties
+                return allActionsProperties.indexOf(prop) < 0 &&
+                    // Only regard functions
+                    typeof instance[prop] == 'function';
             });
 
-            let actionsInstance = new Actions();
-
-            this.actions[key] = actionsInstance;
-            this.actionIds[key] = {};
-            this.actionsDecorators[key] = {};
-
-            for(let action of getAllPropertyNames(actionsInstance)) {
-                // Ignore object prototype functions
-                if(obj[action]) continue;
-                if(eventEmitterMethods.indexOf(action) > -1) continue;
-                // Ignore constructor
-                if(action === 'constructor') continue;
-                // Ignore getter
-                if(action === 'getActions') continue;
-                if(typeof actionsInstance[action] !== 'function') continue;
-
-                let actionId = 'a' + actionIds++;
-                let actionFn = actionsInstance[action].bind(actionsInstance);
-
-                actionsInstance.addListener(action, this.dispatch.bind(this, actionId));
-
-                this.actionIds[key][action] = actionId;
-                this.actionsById[actionId] = actionFn;
-                this.actionsDecorators[key][action] = actionFn;
+            for(let prop of props) {
+                let fn = instance[prop].bind(instance);
+                let id = [key, prop].join('.');
+                instance.addListener(prop, this.dispatch.bind(this, id));
+                this.actions[key][prop] = fn;
             }
         }
     }
@@ -91,45 +76,30 @@ export default class Dispatcher {
         // Topological sort
         let order = this.order = toposort.array(nodes, edges).reverse();
 
-        let instances = this.stores;
-
         for(let i = 0, l = order.length; i < l; i++){
             let key = order[i];
             let Store = stores[key];
 
-            if(Array.isArray(Store)) Store = Store[0];   
+            if(Array.isArray(Store)) Store = Store[0];  
+            assign(Store.prototype, { stores: this.stores });
 
-            assign(Store.prototype, {
-                getStore: this.getStore.bind(this),
-                getActions: this.getActions.bind(this)
+            let instance = new Store();
+            this._stores[key] = instance;
+            this.stores[key] = {};
+
+            let props = getAllPropertyNames(instance).filter((prop) => {
+                // Only regard functions
+                return typeof instance[prop] === 'function' &&
+                    // Functions that start with get
+                    (prop.indexOf('get') === 0 || 
+                        // Event emitter function, except emit
+                        (eventEmitterProperties.indexOf(prop) > -1 && prop !== 'emit'));
             });
 
-            let store = new Store(this.actionIds);
-            this.stores[key] = store;
-
-            let decorator = {};
-
-            for(let prop of getAllPropertyNames(store)) {
-                let fn = store[prop];
-                if(prop === 'constructor' || prop === 'getStore' || prop === 'getActions') continue;
-                if(typeof fn !== 'function') continue;
-
-                if(prop.indexOf('get') === 0 || eventEmitterMethods.indexOf(prop) > -1) {
-                    decorator[prop] = store[prop].bind(store);    
-                }
+            for(let prop of props) {
+                this.stores[key][prop] = instance[prop].bind(instance);
             }
-            this.storeDecorators[key] = decorator;
         }
-    }
-
-    getStore(key) {
-        if(!key) return this.storeDecorators;
-        return this.storeDecorators[key];
-    }
-
-    getActions(key) {
-        if(!key) return this.actionsDecorators;
-        return this.actionsDecorators[key];
     }
 
 }

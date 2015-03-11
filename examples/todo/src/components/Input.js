@@ -1,8 +1,8 @@
 import React from 'react';
 import flux from '../flux';
 
-var todoActions = flux.getActions('todos');
-var todoStore = flux.getStore('todos');
+var todoActions = flux.actions.todos;
+var todoStore = flux.stores.todos;
 
 export default class Input extends React.Component {
 

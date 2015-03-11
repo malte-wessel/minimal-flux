@@ -2,25 +2,25 @@ import React from 'react';
 import flux from '../flux';
 import Input from './Input';
 
-var todoActions = flux.getActions('todos');
-var todoStore = flux.getStore('todos');
+let todoActions = flux.actions.todos;
+let todoStore = flux.stores.todos;
 
 export default class App extends React.Component {
 
     constructor(props) {
         super(props);
+        this.setState = this.setState.bind(this);
         this.state = todoStore.getState();
     }
 
     componentDidMount() {
-        todoStore.addListener('change', this.setState.bind(this));
+        todoStore.addListener('change', this.setState);
         todoStore.addListener('change', (s) => console.log(s));
         todoActions.fetch();
     }
 
     componentWillUnmount() {
-        // Change: this.setState.bind() will not be unbound
-        todoStore.removeListener('change', this.setState.bind(this));
+        todoStore.removeListener('change', this.setState);
     }
 
     onClickDone(id) {

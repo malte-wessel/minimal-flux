@@ -19,7 +19,7 @@
   "author": "Malte Wessel <delabreak@gmail.com>",
   "license": "MIT",
   "devDependencies": {
-    "babel": "^4.3.0",
+    "babel": "^4.7.8",
     "tape": "^3.5.0"
   },
   "dependencies": {

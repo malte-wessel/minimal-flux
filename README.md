@@ -25,31 +25,43 @@ npm install minimal-flux --save
 
 [![Minimalflux](http://breakdesign.de/minimalflux.png)]()
 
-## Example
+## Examples
+
+### The basics
 
 ````javascript
 import React from 'react';
 import { Actions, Store, Flux } from 'minimal-flux';
 
 class MessageActions extends Actions {
+
+    // Create an action...
     create(message) {
         this.emit('create', message);
     }
+    
 }
 
 class MessageStore extends Store {
+
     constructor() {
         this.state = {messages: []};
+        
+        // Register an action handler
         this.handleAction('messages.create', this.handleCreate);
     }
 
     handleCreate(message) {
         let { messages } = this.getState();
         messages.push(message);
+        
+        // Update the store's state
         this.setState({ messages });
     }
+    
 }
 
+// Create a new Flux instance and pass the actions and stores
 let flux = new Flux({
     actions: {messages: MessagesActions},
     stores: {messages: MessagesStore},
@@ -81,18 +93,140 @@ class Messages extends React.Component {
 
 ````
 
-## Documentation
+### Fetching data
 
-Work in progess. Have a look at the examples & tests!
+````javascript
+
+class MessageActions extends Actions {
+
+    fetch() {
+        // Invoke wait action
+        this.wait();
+        // Make a request to your API
+        request.get('/api/messages').end((err, res) => {
+            // If we got an error invoke fail action
+            if(err) return this.fail(err);
+            // Otherwise invoke complete action
+            this.complete(res.data);
+        });
+    }
+    
+    wait() {
+        this.emit('wait');
+    }
+    
+    complete(data) {
+        this.emit('complete', data);
+    }
+    
+    fail(err) {
+        this.emit('fail', err);
+    }
+    
+}
+
+class MessageStore extends Store {
+    constructor() {
+        this.state = {messages: []};
+        this.handleAction('messages.wait', this.handleWait);
+        this.handleAction('messages.complete', this.handleComplete);
+        this.handleAction('messages.fail', this.handleFail);
+    }
+
+    handleWait(message) {
+        this.setState({
+            waiting: true,
+            error: undefined
+        });
+    }
+    
+    handleComplete(data) {
+        this.setState({
+            messages: data,
+            waiting: false,
+            error: undefined
+        });
+    }    
+    
+    handleFail(err) {
+        this.setState({
+            waiting: false,
+            error: err
+        });
+    }
+}
 
 
-## Examples
+````
 
-You can find some examples in `examples/`. Run the following commands in the `examples/<example>/` directory:
+### Dependencies between stores
+
+````javascript
+
+class MessageActions extends Actions {
+    receive(message) {
+        this.emit('receive', message);
+    }
+}
+
+class MessageStore extends Store {
+    constructor() {
+        this.state = {messages: []};
+        this.handleAction('messages.receive', this.handleReceive);
+    }
+
+    handleReceive(message) {
+        let { messages } = this.getState();
+        messages.push(message);
+        this.setState({ messages });
+    }
+}
+
+class UnreadStore extends Store {
+    constructor() {
+        this.state = {count: null};
+        this.handleAction('messages.receive', this.handleReceive);
+    }
+    
+    handleReceive(message) {
+        let { messages } = this.stores.messages.getState();
+        let count = 0;
+        for(msg of messages) if(msg.unread) count++;
+        this.setState({ count });
+    }
+}
+
+let flux = new Flux({
+    actions: {
+        messages: MessagesActions
+    },
+    stores: {
+        messages: MessagesStore,
+        // Since UnreadStore depends on MessageStore, 
+        // we need to make sure that the MessageStore handles
+        // the action first. This can be done by defining dependencies:
+        unread: [UnreadStore, 'messages']
+    },
+});
+````
+
+
+## More examples
+
+You can find more examples in `examples/`. Run the following commands in the `examples/<example>/` directory:
 
 ````
 npm install
 npm run build
 ````
 
-Then open index.html in your browser.
+Then open the index.html in your browser.
+
+## Documentation
+
+Work in progess. Have a look at the examples & tests!
+
+## Inspiration
+* [Facebook Flux](https://github.com/facebook/flux)
+* [Flummox](https://github.com/acdlite/flummox)
+* [Reflux](https://github.com/spoike/refluxjs)

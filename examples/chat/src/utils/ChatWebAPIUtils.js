@@ -11,7 +11,7 @@
  */
 
 import flux from '../flux.js';
-let serverActions = flux.getActions('server');
+let serverActions = flux.actions.server;
 
 // !!! Please Note !!!
 // We are using localStorage as an example, but in a real-world scenario, this

@@ -10,7 +10,7 @@ class ThreadSection extends React.Component {
     }
 
     getStateFromStores() {
-        let stores = this.context.flux.getStore();
+        let stores = this.context.flux.stores;
         return {
             threads: stores.threads.getAllChrono(),
             currentThreadId: stores.threads.getCurrentId(),
@@ -23,13 +23,13 @@ class ThreadSection extends React.Component {
     }
 
     componentDidMount() {
-        let stores = this.context.flux.getStore();
+        let stores = this.context.flux.stores;
         stores.messages.addListener('change', this.onChange);
         stores.unread.addListener('change', this.onChange);
     }
 
     componentWillUnmount() {
-        let stores = this.context.flux.getStore();
+        let stores = this.context.flux.stores;
         stores.messages.removeListener('change', this.onChange);
         stores.unread.removeListener('change', this.onChange);
     }

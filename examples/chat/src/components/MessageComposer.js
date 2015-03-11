@@ -20,7 +20,7 @@ class MessageComposer extends React.Component {
             event.preventDefault();
             let text = this.state.text.trim();
             if (text) {
-                this.context.flux.getActions('messages').createMessage(text, this.props.threadId);
+                this.context.flux.actions.messages.createMessage(text, this.props.threadId);
             }
             this.setState({text: ''});
         }

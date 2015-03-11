@@ -4,8 +4,8 @@ export default class UnreadStore extends Store {
 
     constructor(actions) {
         this.setState({ count: null });
-        this.listenTo(actions.threads.clickThread, this.handleClickThread);
-        this.listenTo(actions.server.receiveAll, this.handleReceiveAll);
+        this.handleAction('threads.clickThread', this.handleClickThread);
+        this.handleAction('server.receiveAll', this.handleReceiveAll);
     }
 
     handleClickThread(threadId) {
@@ -17,7 +17,7 @@ export default class UnreadStore extends Store {
     }
 
     setCount() {
-        let threads = this.getStore('threads').getAll();
+        let threads = this.stores.threads.getAll();
         let count = 0;
         for (let id in threads) {
             if (threads[id].lastMessage.isRead) continue;

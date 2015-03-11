@@ -11,7 +11,7 @@ class MessageSection extends React.Component {
     }
 
     getStateFromStores() {
-        let stores = this.context.flux.getStore();
+        let stores = this.context.flux.stores;
         return {
             messages: stores.messages.getAllForCurrentThread(),
             thread: stores.threads.getCurrent()
@@ -24,7 +24,7 @@ class MessageSection extends React.Component {
 
     componentDidMount() {
         this.scrollToBottom();
-        let stores = this.context.flux.getStore();
+        let stores = this.context.flux.stores;
         stores.messages.addListener('change', this.onChange);
         stores.threads.addListener('change', this.onChange);
     }
@@ -34,9 +34,9 @@ class MessageSection extends React.Component {
     }
 
     componentWillUnmount() {
-        let stores = this.context.flux.getStore();
-        stores.messages.addListener('change', this.onChange);
-        stores.threads.addListener('change', this.onChange);
+        let stores = this.context.flux.stores;
+        stores.messages.removeListener('change', this.onChange);
+        stores.threads.removeListener('change', this.onChange);
     }
 
     scrollToBottom() {

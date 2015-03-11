@@ -8,8 +8,8 @@ export default class ThreadStore extends Store {
             currentId: null,
             threads: {}
         });
-        this.listenTo(actions.threads.clickThread, this.handleClickThread);
-        this.listenTo(actions.server.receiveAll, this.handleReceiveAll);
+        this.handleAction('threads.clickThread', this.handleClickThread);
+        this.handleAction('server.receiveAll', this.handleReceiveAll);
     }
 
     handleClickThread(threadId) {

@@ -5,13 +5,13 @@ export default class MessageStore extends Store {
 
     constructor(actions) {
         this.setState({messages: {}});
-        this.listenTo(actions.threads.clickThread, this.handleClickThread);
-        this.listenTo(actions.messages.createMessage, this.handleCreateMessage);
-        this.listenTo(actions.server.receiveAll, this.handleReceiveAll);
+        this.handleAction('threads.clickThread', this.handleClickThread);
+        this.handleAction('messages.createMessage', this.handleCreateMessage);
+        this.handleAction('server.receiveAll', this.handleReceiveAll);
     }
 
     handleClickThread(threadId) {
-        this.markAllInThreadRead(this.getStore('threads').getCurrentId());
+        this.markAllInThreadRead(this.stores.threads.getCurrentId());
     }
 
     handleCreateMessage(text, threadId) {
@@ -20,7 +20,7 @@ export default class MessageStore extends Store {
 
     handleReceiveAll(rawMessages) {
         this.addMessages(rawMessages);
-        this.markAllInThreadRead(this.getStore('threads').getCurrentId());
+        this.markAllInThreadRead(this.stores.threads.getCurrentId());
     }
 
     markAllInThreadRead(threadId) {
@@ -41,7 +41,7 @@ export default class MessageStore extends Store {
 
     addMessages(rawMessages) {
         let { messages } = this.getState();
-        let threadStore = this.getStore('threads');
+        let threadStore = this.stores.threads;
 
         rawMessages.forEach(function(message) {
             if (messages[message.id]) return;
@@ -78,7 +78,7 @@ export default class MessageStore extends Store {
     }
 
     getAllForCurrentThread() {
-        let threadStore = this.getStore('threads');
+        let threadStore = this.stores.threads;
         return this.getAllForThread(threadStore.getCurrentId());
     }
 }

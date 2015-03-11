@@ -9,7 +9,8 @@ class ThreadListItem extends React.Component {
 	}
 
 	onClick() {
-		this.context.flux.getActions('threads').clickThread(this.props.thread.id);
+		let threadActions = this.context.flux.actions.threads;
+		threadActions.clickThread(this.props.thread.id);
 	}
 
 	render() {

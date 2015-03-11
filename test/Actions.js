@@ -2,6 +2,11 @@ import test from 'tape';
 import Dispatcher from './../src/Dispatcher';
 import Actions from './../src/Actions';
 
+let warnings = [];
+console.warn = function(msg) {
+    warnings.push(msg);
+};
+
 class FooActions extends Actions {
     foo(a) {
         this.emit('foo', a);
@@ -26,6 +31,9 @@ class BarActions extends Actions {
 class Bar2Actions extends BarActions {
     bar2() {
         this.emit('bar2');
+    }
+    bar3() {
+        this.emit('notimplemented');
     }
 }
 
@@ -120,5 +128,12 @@ test('Actions: decorators multiple inheritance', (t) => {
     t.ok(typeof actions.bar2 === 'function', 
         'should decorate own actions');
 
+    t.end();
+});
+
+test('Actions: warn when emitting not implemented actions', (t) => {
+    warnings = [];
+    flux.actions.bar2.bar3();
+    t.deepEqual(warnings, ['Bar2Actions emitted `notimplemented`. This action is not implemented and can therefore not be dispatched.']);
     t.end();
 });

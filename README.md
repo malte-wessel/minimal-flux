@@ -5,7 +5,7 @@ A very lightweight implementation of Flux
 
 [![Travis](https://img.shields.io/travis/malte-wessel/minimal-flux.svg?style=flat-square)](https://travis-ci.org/malte-wessel/minimal-flux)
 [![David](https://img.shields.io/david/malte-wessel/minimal-flux.svg?style=flat-square)]()
-[![NPM](https://img.shields.io/badge/npm-minimal-flux-brightgreen.svg?style=flat-square)]()
+[![NPM](https://img.shields.io/badge/NPM-minimal--flux-brightgreen.svg?style=flat-square)]()
 
 ## Install
 
@@ -21,6 +21,8 @@ npm install minimal-flux --save
 * Isolated access
 * Easily testable
 * No singletons
+
+[![Minimalflux](http://breakdesign.de/minimalflux.png)]()
 
 ## Example
 

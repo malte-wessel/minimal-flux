@@ -45,17 +45,19 @@ class MessageActions extends Actions {
 class MessageStore extends Store {
 
     constructor() {
+        // Set initial state
         this.state = {messages: []};
         
         // Register an action handler
         this.handleAction('messages.create', this.handleCreate);
     }
-
+    
     handleCreate(message) {
         let { messages } = this.getState();
         messages.push(message);
         
         // Update the store's state
+        // `setState` will trigger a change event
         this.setState({ messages });
     }
     
@@ -67,18 +69,25 @@ let flux = new Flux({
     stores: {messages: MessagesStore},
 });
 
+// Use flux inside your components
 class Messages extends React.Component {
 
     constructor() {
         this.setState = this.setState.bind(this);
-        this.state = flux.store.messages.getState();
+        // Set the component's initial state.
+        // Note: Inside your components, you only have access
+        // to store functions that start with `get` or 
+        // are inherited from EventEmitter
+        this.state = flux.stores.messages.getState();
     }
 
     componentWillMount() {
+        // Listen to changes in the store
         flux.stores.messages.addListener('change', this.setState);
     }
 
     componentWillUnmount() {
+        // Stop listen to changes in the store
         flux.stores.messages.removeListener('change', this.setState);
     }
 

@@ -14,13 +14,14 @@ npm install minimal-flux --save
 ````
 
 ## Features
-* Unidirectional data flow implemented with the flux pattern
-* Minimal API, lightweight implementation (~200 lines)
-* Idiomatic Javascript (ready for use with ES6)
-* Completely synchronous
-* Isolated access
-* Easily testable
-* No singletons
+* **Unidirectional data flow** implemented with the flux pattern
+* **Minimal API**, lightweight implementation (~200 lines)
+* **Idiomatic** Javascript (ready for use with ES6)
+* Completely **synchronous**
+* **Isolated** access
+* **Easily testable**
+* **No singletons**
+* **Declarative** definition of **dependencies between stores**
 
 [![Minimalflux](http://breakdesign.de/minimalflux.png)]()
 

@@ -244,3 +244,6 @@ Work in progess. Have a look at the examples & tests!
 * [Facebook Flux](https://github.com/facebook/flux)
 * [Flummox](https://github.com/acdlite/flummox)
 * [Reflux](https://github.com/spoike/refluxjs)
+
+## License
+MIT

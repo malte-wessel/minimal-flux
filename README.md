@@ -35,7 +35,7 @@ Here you can see how the flux loop works:
 2. Store listen to actions and can update their state
 3. Components listen to store updates and rerender if something changes
 
-What about the dispatcher? *Minimal-flux* implements an own dispatcher under the hood - you don't have to worry about those details, just invoke actions and you're good :) Let's look at some code!
+What about the dispatcher? Minimal-flux implements an own dispatcher under the hood - you don't have to worry about those details, just invoke actions and you're good :) Let's have a look at some code!
 
 ### Actions
 

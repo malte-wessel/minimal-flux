@@ -88,6 +88,7 @@ class MessageStore extends Store {
 ### Components
 
 ````javascript
+import { Flux } from 'minimal-flux';
 import MessageActions from './MessageActions';
 import MessageStore from './MessageStore';
 

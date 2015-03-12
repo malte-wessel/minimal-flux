@@ -149,8 +149,8 @@ let state = flux.stores.todos.getState()
 flux.stores.todos.addListener('change', handler);
 ````
 
-#### Stores can get data from other stores**
-Inside your stores you have access to all other registered stores. Same as before: you can not update stores from other stores.
+#### Stores can get data from other stores
+Inside your stores you have access to all other registered stores. Same as before: you cannot update stores from other stores.
 
 ````javascript
 class ThreadStore extends Store {

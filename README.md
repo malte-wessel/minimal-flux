@@ -7,6 +7,11 @@ A lightweight implementation of Flux
 [![David](https://img.shields.io/david/malte-wessel/minimal-flux.svg?style=flat-square)]()
 [![NPM](https://img.shields.io/badge/NPM-minimal--flux-brightgreen.svg?style=flat-square)]()
 
+* [Features](#features)
+* [The basics](#the-basics)
+* [Core concepts](#core-concepts)
+* [Examples](#examples)
+
 ## Install
 
 ````
@@ -323,7 +328,7 @@ let flux = new Flux({
 });
 ````
 
-## More examples
+## Examples
 
 You can find more examples in `examples/`. Run the following commands to make the examples work:
 

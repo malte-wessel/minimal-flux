@@ -87,8 +87,8 @@ import MessageActions from './MessageActions';
 import MessageStore from './MessageStore';
 
 // Create a new Flux instance and pass the actions and stores.
-// You can of course put this in an own file and require it inside your
-// components or just pass it down the Component tree via context.
+// You can of course put this into an own file and require it inside your
+// components or just pass it down the components tree via context.
 let flux = new Flux({
     actions: {messages: MessagesActions},
     stores: {messages: MessagesStore},

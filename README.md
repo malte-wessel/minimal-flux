@@ -222,10 +222,15 @@ let flux = new Flux({
 
 ## More examples
 
-You can find more examples in `examples/`. Run the following commands in the `examples/<example>/` directory:
+You can find more examples in `examples/`. Run the following commands to make the examples work:
 
-````
+````bash
+# Run install for minimal-flux in the root directory
 npm install
+# Change to one of the examples
+cd examples/<example>
+# Install and build the example
+npm run install
 npm run build
 ````
 

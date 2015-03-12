@@ -201,6 +201,7 @@ class MessageActions extend Actions {
         this.dispatch('fail', error);
     }
 }
+````
 
 ## Advanced patterns
 

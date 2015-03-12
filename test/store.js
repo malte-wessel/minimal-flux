@@ -57,13 +57,13 @@ class BazStore extends Store {
 
 class FooActions extends Actions {
     foo(foo) {
-        this.emit('foo', foo);
+        this.dispatch('foo', foo);
     }
     bar(bar) {
-        this.emit('bar', bar);
+        this.dispatch('bar', bar);
     }
     baz(baz) {
-        this.emit('baz', baz);
+        this.dispatch('baz', baz);
     }
 }
 

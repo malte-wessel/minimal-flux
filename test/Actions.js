@@ -9,16 +9,16 @@ console.warn = function(msg) {
 
 class FooActions extends Actions {
     foo(a) {
-        this.emit('foo', a);
+        this.dispatch('foo', a);
     }
     foo2(a) {
         this.foo3(a);
     }
     foo3(a) {
-        this.emit('foo3', a);
+        this.dispatch('foo3', a);
     }
     foo4(a, b, c) {
-        this.emit('foo4', a, b, c);
+        this.dispatch('foo4', a, b, c);
     }
 }
 
@@ -30,10 +30,10 @@ class BarActions extends Actions {
 
 class Bar2Actions extends BarActions {
     bar2() {
-        this.emit('bar2');
+        this.dispatch('bar2');
     }
     bar3() {
-        this.emit('notimplemented');
+        this.dispatch('notimplemented');
     }
 }
 

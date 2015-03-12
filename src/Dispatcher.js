@@ -42,13 +42,21 @@ export default class Dispatcher {
      * @return {void}
      */
     dispatch(id, ...args) {
-        let stores = this._stores;
+        if(this._isDispatching) {
+            throw new Error('Cannot dispatch in the middle of a dispatch.');
+        }
+
+        this._isDispatching = true;
+
         // Run through stores and invoke registered handlers
+        let stores = this._stores;
         for (let key of this.order) {
             let handlers = stores[key]._handlers;
             if(!handlers || !handlers[id]) continue;
             handlers[id](...args);
         }
+
+        this._isDispatching = false;
     }
 
     /**
@@ -81,7 +89,7 @@ export default class Dispatcher {
                 let id = [key, prop].join('.');
                 // Listen to the action event
                 instance.addListener(prop, this.dispatch.bind(this, id));
-                // Add function to the decorated objecz
+                // Add function to the decorated object
                 this.actions[key][prop] = fn;
             }
         }

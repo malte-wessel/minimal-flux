@@ -7,133 +7,135 @@ console.warn = function(msg) {
     warnings.push(msg);
 };
 
-class FooActions extends Actions {
-    foo(a) {
-        this.dispatch('foo', a);
-    }
-    foo2(a) {
-        this.foo3(a);
-    }
-    foo3(a) {
-        this.dispatch('foo3', a);
-    }
-    foo4(a, b, c) {
-        this.dispatch('foo4', a, b, c);
-    }
-}
-
-class BarActions extends Actions {
-    bar(a) {
-        this.actions.foo.foo(a);
-    }
-}
-
-class Bar2Actions extends BarActions {
-    bar2() {
-        this.dispatch('bar2');
-    }
-    bar3() {
-        this.dispatch('notimplemented');
-    }
-}
-
-let dispatched = [];
-class TestDispatcher extends Dispatcher {
-    dispatch(...args) {
-        dispatched.push([...args]);
-    }
-}
-
-var flux = new TestDispatcher({
-    actions: {
-        foo: FooActions, 
-        bar: BarActions,
-        bar2: Bar2Actions
-    }
-});
-
 test('Actions: create actions', (t) => {
 
-    t.ok(flux.actions.foo !== 'undefined', 
-        'should create actions');
+    class FooActions extends Actions {
+        foo() { this.dispatch('foo'); }
+    }
 
-    t.end();
-});
+    let flux = new Dispatcher({ actions: { foo: FooActions } });
 
-
-test('Actions: decorators delegation', (t) => {
-    dispatched = [];
-    flux.actions.foo.foo('foo');
-
-    t.deepEqual(dispatched, [['foo.foo', 'foo']],
-        'should invoke actual action');
-
-    t.end();
-});
-
-test('Actions: call actions with multiple arguments', (t) => {
-    dispatched = [];
-    flux.actions.foo.foo4('one', 'two', 'three');
-
-    t.deepEqual(dispatched, [['foo.foo4', 'one', 'two', 'three']], 
-        'should invoke own actions');
-
-    t.end();
-});
-
-test('Actions: call own actions', (t) => {
-    dispatched = [];
-    flux.actions.foo.foo2('foo2');
-
-    t.deepEqual(dispatched, [['foo.foo3', 'foo2']], 
-        'should invoke own actions');
-
-    t.end();
-});
-
-test('Actions: call other actions', (t) => {
-    dispatched = [];
-    flux.actions.bar.bar('bar');
-
-    t.deepEqual(dispatched, [['foo.foo', 'bar']], 
-        'should invoke other actions');
+    t.ok(flux.actions.foo !== 'undefined', 'should create actions');
 
     t.end();
 });
 
 test('Actions: decorators', (t) => {
-    let actions = flux.actions.foo;
+    
+    class FooActions extends Actions {
+        foo() { this.dispatch('foo'); }
+        foo2() { this.dispatch('foo2'); }
+    }
 
-    t.notOk(actions instanceof FooActions, 
+    class BarActions extends FooActions {
+        bar() { this.dispatch('bar'); }
+    }
+
+    let flux = new Dispatcher({
+        actions: {
+            foo: FooActions,
+            bar: BarActions
+        }
+    });
+
+    t.notOk(flux.actions.foo instanceof FooActions, 
         'should decorate actions');
 
-    t.deepEqual(Object.keys(actions), ['foo', 'foo2', 'foo3', 'foo4'], 
+    t.deepEqual(Object.keys(flux.actions.foo), ['foo', 'foo2'], 
         'should decorate each action');
 
-    t.notOk(typeof actions.addListener === 'function', 
+    t.notOk(typeof flux.actions.foo.addListener === 'function', 
         'should not decorate eventemitter functions');
 
-    t.end();
-});
-
-test('Actions: decorators multiple inheritance', (t) => {
-    let actions = flux.actions.bar2;
-
-    t.notOk(actions instanceof Bar2Actions, 
+    t.notOk(flux.actions.bar instanceof BarActions, 
         'should decorate actions');
 
-    t.ok(typeof actions.bar === 'function', 
+    t.ok(typeof flux.actions.bar.bar === 'function', 
         'should decorate inherited actions');
 
-    t.ok(typeof actions.bar2 === 'function', 
+    t.ok(typeof flux.actions.bar.foo === 'function', 
         'should decorate own actions');
 
     t.end();
 });
 
+test('Actions: invoking actions', (t) => {
+
+    let dispatched = [];
+
+    class FooActions extends Actions {
+        foo() { this.dispatch('foo'); }
+        bar(a, b, c) { this.dispatch('bar', a, b, c); }
+    }
+
+    class ExtendedDispatcher extends Dispatcher {
+        dispatch(...args) { dispatched.push(...args); }
+    }
+
+    let flux = new ExtendedDispatcher({ actions: { foo: FooActions } });
+
+    dispatched = [];
+    flux.actions.foo.foo('foo');
+    t.deepEqual(dispatched, ['foo.foo'], 
+        'should invoke actual action');
+
+    dispatched = [];
+    flux.actions.foo.bar('one', 'two', 'three');
+    t.deepEqual(dispatched, ['foo.bar', 'one', 'two', 'three'], 
+        'should invoke actions with multiple arguments');
+
+    t.end();
+});
+
+
+test('Actions: invoking actions inside of actions', (t) => {
+    
+    let dispatched = [];
+
+    class FooActions extends Actions {
+        foo(a) { this.dispatch('foo', a); }
+        foo2(a) { this.foo(a); }
+    }
+
+    class BarActions extends Actions {
+        bar(a) { this.actions.foo.foo(a); }
+    }
+
+    class ExtendedDispatcher extends Dispatcher {
+        dispatch(...args) { dispatched.push(...args); }
+    }
+
+    let flux = new ExtendedDispatcher({
+        actions: {
+            foo: FooActions,
+            bar: BarActions
+        }
+    });
+
+    dispatched = [];
+    flux.actions.foo.foo2('foo2');
+    t.deepEqual(dispatched, ['foo.foo', 'foo2'], 
+        'should invoke own actions');
+
+    dispatched = [];
+    flux.actions.bar.bar('bar');
+    t.deepEqual(dispatched, ['foo.foo', 'bar'], 
+        'should invoke own actions');
+
+    t.end();
+});
+
 test('Actions: warn when emitting not implemented actions', (t) => {
+
+    class FooActions extends Actions {
+        foo() { this.dispatch('notimplemented'); }
+    }
+
+    let flux = new Dispatcher({ actions: { foo: FooActions } });
+
     warnings = [];
-    flux.actions.bar2.bar3();
-    t.deepEqual(warnings, ['Bar2Actions emitted `notimplemented`. This action is not implemented and can therefore not be dispatched.']);
+    flux.actions.foo.foo();
+    t.deepEqual(warnings, ['FooActions emitted `notimplemented`. This action is not implemented and can therefore not be dispatched.']);
+    
     t.end();
 });

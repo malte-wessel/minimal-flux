@@ -3,33 +3,66 @@ import Dispatcher from './../src/Dispatcher';
 import Actions from './../src/Actions';
 import Store from './../src/Store';
 
-let flux;
+test('Dispatcher: dispatch', (t) => {
+    let handled = [];
 
-class FooStore extends Store {
-
-    constructor() {
-        this.handleAction('foo.foo', function() {
-            flux.actions.foo.bar();
-        });
+    class FooActions extends Actions {
+        foo() { this.dispatch('foo'); }
     }
 
-}
-
-class FooActions extends Actions {
-    foo() {
-        this.dispatch('foo');
+    class FooStore extends Store {
+        constructor() { this.handleAction('foo.foo', this.handleFooFoo); }
+        handleFooFoo() { handled.push('foo'); }
     }
-    bar() {
-        this.dispatch('bar');
+    class BarStore extends Store {
+        constructor() { this.handleAction('foo.foo', this.handleFooFoo); }
+        handleFooFoo() { handled.push('bar'); }
     }
-}
+    class BazStore extends Store {
+        constructor() { this.handleAction('foo.foo', this.handleFooFoo); }
+        handleFooFoo() { handled.push('baz'); }
+    }
 
-flux = new Dispatcher({
-    stores: {foo: FooStore},
-    actions: {foo: FooActions}
+    let flux = new Dispatcher({
+        actions: {
+            foo: FooActions
+        },
+        stores: {
+            foo: FooStore,
+            bar: [BarStore, 'foo', 'baz'],
+            baz: BazStore
+        }
+    });
+
+    flux.actions.foo.foo();
+    t.deepEqual(handled, ['baz', 'foo', 'bar'],
+        'should dispatch action in a topological order');
+
+    t.end();
+
 });
 
-test('Dispatch while dispatching', (t) => {
+test('Dispatcher: dispatch while dispatching', (t) => {
+
+    let flux;
+
+    class FooStore extends Store {
+        constructor() {
+            this.handleAction('foo.foo', () => flux.actions.foo.bar());
+        }
+    }
+
+    class FooActions extends Actions {
+        foo() { this.dispatch('foo'); }
+        bar() { this.dispatch('bar'); }
+    }
+
+    flux = new Dispatcher({
+        stores: {foo: FooStore},
+        actions: {foo: FooActions}
+    });
+
     t.throws(() => flux.actions.foo.foo(), 'should throw error');
     t.end();
+
 });

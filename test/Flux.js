@@ -3,19 +3,11 @@ import Flux from './../src/Flux';
 import Actions from './../src/Actions';
 import Store from './../src/Store';
 
-class FooActions extends Actions { foo() {} }
-class FooStore extends Store {}
+test('Flux: expose stores and actions', (t) => {
 
-class ExtendedFlux extends Flux {
-    constructor() {
-        super({
-            actions: {foo: FooActions},
-            stores: {foo: FooStore}
-        });
-    }
-}
+    class FooActions extends Actions {}
+    class FooStore extends Store {}
 
-test('Expose stores and actions', (t) => {
     let flux = new Flux({
         actions: {foo: FooActions},
         stores: {foo: FooStore}
@@ -35,7 +27,19 @@ test('Expose stores and actions', (t) => {
     t.end();
 });
 
-test('Create actions and stores with super', (t) => {
+test('Flux: create actions and stores with super', (t) => {
+    class FooActions extends Actions { foo() {} }
+    class FooStore extends Store {}
+
+    class ExtendedFlux extends Flux {
+        constructor() {
+            super({
+                actions: {foo: FooActions},
+                stores: {foo: FooStore}
+            });
+        }
+    }
+
     var flux = new ExtendedFlux();
 
     t.ok(typeof flux.actions.foo.foo === 'function',

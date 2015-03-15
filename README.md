@@ -138,7 +138,7 @@ class Messages extends React.Component {
 
 ### Isolation
 
-A lot of problems that people have with flux is (besides the bootstrapping) that they don't know where to put things and which actor is allowed to perform which operation. Minimal-flux isolates stores and actions, so that you are forced to follow the flux pattern.
+A lot of problems that people have with flux is that they don't know where to put things and which actor is allowed to perform which operation. Minimal-flux isolates stores and actions, so that you are forced to follow the flux pattern.
 
 Here are the rules :)
 

@@ -24,7 +24,7 @@ npm install minimal-flux --save
 * **Minimal API**, lightweight implementation (~200 lines)
 * **Isolated** stores
 * **Idiomatic** Javascript (ready for use with ES6)
-* Completely **synchronous**
+* **Completely synchronous**
 * **Easily testable**
 * **No singletons**
 * **Declarative** definition of **dependencies between stores**

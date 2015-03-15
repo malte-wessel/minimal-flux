@@ -11,6 +11,7 @@ A lightweight implementation of Flux
 * [The basics](#the-basics)
 * [Core concepts](#core-concepts)
 * [Examples](#examples)
+* [Boilerplates](#boilerplates)
 
 ## Install
 
@@ -344,6 +345,11 @@ npm run build
 ````
 
 Then open the index.html in your browser.
+
+## Boilerplates
+
+* [mbrio/react-boilerplate](https://github.com/mbrio/react-boilerplate/tree/react-0.13-minimal-flux) Thanks to @mbrio
+
 
 ## Documentation
 

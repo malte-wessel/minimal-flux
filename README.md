@@ -9,7 +9,9 @@ A lightweight implementation of Flux
 
 * [Features](#features)
 * [The basics](#the-basics)
-* [Core concepts](#core-concepts)
+* [Documentation](#documentation)
+    * [Core concepts](#core-concepts)
+    * [API](#api)
 * [Examples](#examples)
 * [Boilerplates](#boilerplates)
 
@@ -68,7 +70,7 @@ class MessageStore extends Store {
 
     constructor() {
         // Set initial state
-        this.state = {messages: []};
+        this.state = { messages: [] };
         
         // Register a handler for the create action
         this.handleAction('messages.create', this.handleCreate);
@@ -97,8 +99,8 @@ import MessageStore from './MessageStore';
 // You can of course put this into an own file and require it inside your
 // components or just pass it down the components tree via context.
 let flux = new Flux({
-    actions: {messages: MessagesActions},
-    stores: {messages: MessagesStore},
+    actions: { messages: MessagesActions },
+    stores: { messages: MessagesStore },
 });
 
 // Use flux inside your components
@@ -134,20 +136,22 @@ class Messages extends React.Component {
 
 ````
 
-## Core concepts
+## Documentation
 
-### Isolation
+### Core concepts
+
+#### Isolation
 
 A lot of problems that people have with flux is that they don't know where to put things and which actor is allowed to perform which operation. Minimal-flux isolates stores and actions, so that you are forced to follow the flux pattern.
 
 Here are the rules :)
 
-#### Stores can only be updated by themselves
+##### Stores can only be updated by themselves
 You can only access your stores through the flux object. When your stores are instantiated they get wrapped by an object that **only exposes getters (methods that start with `get`) and an API for registering events** (stores extend [eventemitter3](https://github.com/primus/eventemitter3)). Therefore you have no chance to update your stores from the outside:
 
 ````javascript
 // ReferenceError: setState is not defined
-flux.stores.todos.setState({foo: 'bar'})
+flux.stores.todos.setState({ foo: 'bar' })
 
 // Getting the state works
 let state = flux.stores.todos.getState()
@@ -156,7 +160,7 @@ let state = flux.stores.todos.getState()
 flux.stores.todos.addListener('change', handler);
 ````
 
-#### Stores can get data from other stores
+##### Stores can get data from other stores
 Inside your stores you have access to all other registered stores. Same as before: you cannot update stores from other stores.
 
 ````javascript
@@ -166,12 +170,12 @@ class ThreadStore extends Store {
         let messages = this.stores.messages.getState();
 
         // ReferenceError: setState is not defined
-        this.stores.message.setState({messages: []})
+        this.stores.message.setState({ messages: [] })
     }
 }
 ````
 
-#### Stores can listen to actions
+##### Stores can listen to actions
 Stores listen to actions and update their state:
 
 ````javascript
@@ -182,7 +186,7 @@ class MessageStore extends Store {
 }
 ````
 
-#### Stores cannot invoke actions
+##### Stores cannot invoke actions
 Invoking actions from within stores is a bad idea. You could easily get into a race condition and break the unidrectional data flow. If you want read more about this [have a look here](https://github.com/facebook/flux/issues/47#issuecomment-54716863)
 
 ````javascript
@@ -194,7 +198,7 @@ class ThreadStore extends Store {
 }
 ````
 
-#### Actions can invoke other actions
+##### Actions can invoke other actions
 
 ````javascript
 class MessageActions extend Actions {
@@ -209,6 +213,115 @@ class MessageActions extend Actions {
     }
 }
 ````
+
+### API
+
+#### Flux
+
+##### `Flux(options)`
+
+* `options` {Object}
+* `options.actions` {Object} Namespaced actions
+* `options.stores` {Object} Namespaced stores
+
+Creates a new flux instance.
+
+##### Example
+````javascript
+import { Flux } from 'minimal-flux';
+import MessageActions from './MessageActions';
+import MessageStore from './MessageStore';
+
+// Create a new Flux instance and pass the actions and stores.
+// You can of course put this into an own file and require it inside your
+// components or just pass it down the components tree via context.
+let flux = new Flux({
+    actions: {
+        messages: MessagesActions
+    },
+    stores: {
+        messages: MessagesStore
+    }
+});
+````
+
+#### Actions
+
+##### `Action.dispatch(name, ...args)`
+
+* `name` {String} The name of the action method
+
+Dispatch the action
+
+###### Example
+````javascript
+class MessageActions extends Actions {
+    create(message) {
+        this.dispatch('create', message);
+    }
+}
+````
+
+#### Stores
+
+Stores should only be instantiated through the [flux object](#flux). When your stores are instantiated they get wrapped by an object that **only exposes getters (methods that start with `get`) and an API for registering events** (stores extend [eventemitter3](https://github.com/primus/eventemitter3)).
+
+##### `Store.handleAction(id, handler)`
+
+* `id` {String} The id of the action to be handled.
+* `handler` {Function} Function that will be invoked when the action is dispatched
+
+Register an action handler. The action id is composed of the key you registered your Action class with and the name of the action method (e.g. `messages.create`). The handler will be bound automatically bound to the store instance. 
+
+###### Example
+````javascript
+class MessageStore extends Store {
+
+    constructor() {
+        this.handleAction('messages.create', this.handleCreate);
+    }
+    
+    handleCreate(message) {
+        // Do stuff
+    }
+}
+````
+
+*This method is only available inside of stores.*
+
+##### `Store.stopHandleAction(id)`
+
+* `id` {String} The id of the action
+
+Unregister an action handler.
+
+*This method is only available inside of stores.*
+
+##### `Store.addListener(event, handler)`
+
+* `event` {String} The name of the event.
+* `handler` {Function}
+
+Add an event listener. Stores emit a `change` event when `setState` is called.
+
+##### `Store.removeListener(event, handler`
+
+* `event` {String} The name of the event.
+* `handler` {Function}
+
+Remove an event listener.
+
+##### `Store.setState(state)`
+
+* `state` {Object} An object containing the state
+
+Set the store's state and emit a `change` event. Note: This will extend the current state with the passed state object.
+
+[**This method is only available inside of stores.**](#stores-can-only-be-updated-by-themselves)
+
+##### `Store.getState()`
+
+Get the store's current state.
 
 ## Advanced patterns
 
@@ -275,8 +388,6 @@ class MessageStore extends Store {
         });
     }
 }
-
-
 ````
 
 ### Dependencies between stores
@@ -350,10 +461,6 @@ Then open the index.html in your browser.
 
 * [mbrio/react-boilerplate](https://github.com/mbrio/react-boilerplate/tree/react-0.13-minimal-flux) Thanks to @mbrio
 
-
-## Documentation
-
-Work in progess. Have a look at the examples & tests!
 
 ## Inspiration
 * [Facebook Flux](https://github.com/facebook/flux)

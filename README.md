@@ -12,6 +12,7 @@ A lightweight implementation of Flux
 * [Documentation](#documentation)
     * [Core concepts](#core-concepts)
     * [API](#api)
+* [Advanced patterns](#advanced-patterns)
 * [Examples](#examples)
 * [Boilerplates](#boilerplates)
 

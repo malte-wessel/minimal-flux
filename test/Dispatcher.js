@@ -62,7 +62,9 @@ test('Dispatcher: dispatch while dispatching', (t) => {
         actions: {foo: FooActions}
     });
 
-    t.throws(() => flux.actions.foo.foo(), 'should throw error');
+    t.throws(() => flux.actions.foo.foo(), /Cannot dispatch in the middle of a dispatch./, 
+        'should throw error');
+    
     t.end();
 
 });

@@ -10,8 +10,21 @@ export default class Store extends EventEmitter {
      * @return {void}
      */
     handleAction(id, handler) {
-        if (typeof handler !== 'function') return;
         if(!this._handlers) this._handlers = {};    
+
+        if (typeof handler !== 'function') {
+            throw new Error(`Attempted to register action handler in ${this.constructor.name}. `+
+                `Handler for action ${id} is undefined.`);
+        }
+        if(!this._actionIdExists(id)) {
+            throw new Error(`Attempted to register action handler in ${this.constructor.name}. `+
+                `Action ${id} does not exist.`);
+        }
+        if(this._handlers[id]) {
+            throw new Error(`Attempted to register action handler in ${this.constructor.name}. `+
+                `Handler for action ${id} in ${this.constructor.name} is already registered.`);
+        }
+
         this._handlers[id] = handler.bind(this);
     }
 
@@ -21,7 +34,7 @@ export default class Store extends EventEmitter {
      * @return {void}
      */
     stopHandleAction(id) {
-        if(!this._handlers || !this._handlers[id]) return;
+        if(!id || !this._handlers || !this._handlers[id]) return;
         this._handlers[id] = undefined;
     }
 
@@ -42,6 +55,16 @@ export default class Store extends EventEmitter {
      */
     getState() {
         return this.state || {};
+    }
+
+    /**
+     * Check if action id exists
+     * @return {Boolean}
+     */
+    _actionIdExists(id) {
+        // This method will be overriden by the dispatcher.
+        // When testing stores without the dispatcher, always return true
+        return true;
     }
 
 }

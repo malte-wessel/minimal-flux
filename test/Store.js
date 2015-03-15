@@ -121,6 +121,49 @@ test('Store: handleAction()', (t) => {
     t.end();
 });
 
+test('Store: handleAction action does not exist', (t) => {
+    class FooStore extends Store {
+        constructor() {
+            this.handleAction('foo.foo', this.handleFooFoo);
+        }
+        handleFooFoo() {}
+    }
+
+    t.throws(() => new Dispatcher({ stores: { foo: FooStore } }), /Attempted to register action handler in FooStore. Action foo.foo does not exist./, 
+        'should throw error');
+
+    t.end();
+});
+
+test('Store: handleAction handler is undefined', (t) => {
+    class FooStore extends Store {
+        constructor() {
+            this.handleAction('foo.foo', this.notimplemented);
+        }
+    }
+
+    t.throws(() => new FooStore(), /Attempted to register action handler in FooStore. Handler for action foo.foo is undefined./, 
+        'should throw error');
+
+    t.end();
+});
+
+test('Store: handleAction handler already registered', (t) => {
+    class FooStore extends Store {
+        constructor() {
+            this.handleAction('foo.foo', this.handleFooFoo);
+            this.handleAction('foo.foo', this.handleFooFoo2);
+        }
+        handleFooFoo() {}
+        handleFooFoo2() {}
+    }
+
+    t.throws(() => new FooStore(), /Attempted to register action handler in FooStore. Handler for action foo.foo in FooStore is already registered./, 
+        'should throw error');
+
+    t.end();
+});
+
 test('Store: setState()', (t) => {
     let emitted = false;
     

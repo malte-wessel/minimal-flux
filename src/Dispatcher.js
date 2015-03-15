@@ -21,6 +21,7 @@ export default class Dispatcher {
     constructor(options) {
         // Decorated actions
         this.actions = {};
+        this.actionIds = [];
         // Decorated stores
         this.stores = {};
         // Actual stores
@@ -87,12 +88,22 @@ export default class Dispatcher {
                 let fn = instance[prop].bind(instance);
                 // The action id is composed from the actions key and its function name
                 let id = [key, prop].join('.');
+                this.actionIds.push(id);
                 // Listen to the action event
                 instance.addListener(prop, this.dispatch.bind(this, id));
                 // Add function to the decorated object
                 this.actions[key][prop] = fn;
             }
         }
+    }
+
+    /**
+     * Check if action id exists
+     * @param  {String} id The action id
+     * @return {Boolean}
+     */
+    actionIdExists(id) {
+        return this.actionIds.indexOf(id) > -1;
     }
 
     /**
@@ -125,7 +136,10 @@ export default class Dispatcher {
             // Handle plain and array definition
             if(Array.isArray(Store)) Store = Store[0];  
             // Make stores available at construction time
-            assign(Store.prototype, { stores: this.stores });
+            assign(Store.prototype, {
+                stores: this.stores,
+                _actionIdExists: this.actionIdExists.bind(this)
+            });
             // Instantiate the store
             let instance = new Store();
             this._stores[key] = instance;

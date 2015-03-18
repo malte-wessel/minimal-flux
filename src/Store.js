@@ -13,16 +13,17 @@ export default class Store extends EventEmitter {
         if(!this._handlers) this._handlers = {};    
 
         if (typeof handler !== 'function') {
-            throw new Error(`Attempted to register action handler in ${this.constructor.name}. `+
-                `Handler for action ${id} is undefined.`);
+            throw new Error(`Handler for action ${id} is not a function. ` + 
+                `Attempted to register action handler in ${this.constructor.name}.`);
         }
         if(!this._actionIdExists(id)) {
-            throw new Error(`Attempted to register action handler in ${this.constructor.name}. `+
-                `Action ${id} does not exist.`);
+            throw new Error(`Action ${id} does not exist. ` + 
+                `Attempted to register action handler in ${this.constructor.name}.`);
         }
         if(this._handlers[id]) {
-            throw new Error(`Attempted to register action handler in ${this.constructor.name}. `+
-                `Handler for action ${id} in ${this.constructor.name} is already registered.`);
+            throw new Error(
+                `Handler for action ${id} is already registered. ` +
+                `Attempted to register action handler in ${this.constructor.name}.`);
         }
 
         this._handlers[id] = handler.bind(this);

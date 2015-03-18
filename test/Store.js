@@ -158,7 +158,7 @@ test('Store: handleAction handler already registered', (t) => {
         handleFooFoo2() {}
     }
 
-    t.throws(() => new FooStore(), /Attempted to register action handler in FooStore. Handler for action foo.foo in FooStore is already registered./, 
+    t.throws(() => new FooStore(), /Attempted to register action handler in FooStore. Handler for action foo.foo is already registered./, 
         'should throw error');
 
     t.end();

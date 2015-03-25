@@ -20,6 +20,22 @@ test('Actions: create actions', (t) => {
     t.end();
 });
 
+test('Actions: binding', (t) => {
+    let barContext;
+    class FooActions extends Actions {
+        foo() { this.bar.call(null); }
+        bar() { barContext = this;  }
+    }
+
+    let flux = new Dispatcher({ actions: { foo: FooActions } });
+
+    flux.actions.foo.foo();
+
+    t.ok(barContext instanceof FooActions, 
+        'should bind methods to actions instance');
+    t.end();
+});
+
 test('Actions: decorators', (t) => {
     
     class FooActions extends Actions {

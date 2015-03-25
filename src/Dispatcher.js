@@ -85,7 +85,7 @@ export default class Dispatcher {
             // Run through actual actions
             for(let prop of props) {
                 // Bind function to instance
-                let fn = instance[prop].bind(instance);
+                let fn = instance[prop] = instance[prop].bind(instance);
                 // The action id is composed from the actions key and its function name
                 let id = [key, prop].join('.');
                 this.actionIds.push(id);

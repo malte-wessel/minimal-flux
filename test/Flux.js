@@ -48,5 +48,8 @@ test('Flux: create actions and stores with super', (t) => {
     t.ok(typeof flux.stores.foo === 'object',
         'should create stores');
 
+    t.ok(Object.keys(flux).length == 2, 
+        'should only expose actions and stores');
+
     t.end();
 });

@@ -60,6 +60,8 @@ test('Store: decorators', (t) => {
 
     class FooStore extends Store {}
 
+    class BarStore extends FooStore {}
+
     let flux = new Dispatcher({
         stores: {
             foo: FooStore
@@ -129,7 +131,7 @@ test('Store: handleAction action does not exist', (t) => {
         handleFooFoo() {}
     }
 
-    t.throws(() => new Dispatcher({ stores: { foo: FooStore } }), /Attempted to register action handler in FooStore. Action foo.foo does not exist./, 
+    t.throws(() => new Dispatcher({ stores: { foo: FooStore } }), /Action foo.foo does not exist. Attempted to register action handler in FooStore./, 
         'should throw error');
 
     t.end();
@@ -142,7 +144,7 @@ test('Store: handleAction handler is undefined', (t) => {
         }
     }
 
-    t.throws(() => new FooStore(), /Attempted to register action handler in FooStore. Handler for action foo.foo is undefined./, 
+    t.throws(() => new FooStore(), /Handler for action foo.foo is not a function. Attempted to register action handler in FooStore./, 
         'should throw error');
 
     t.end();
@@ -158,7 +160,7 @@ test('Store: handleAction handler already registered', (t) => {
         handleFooFoo2() {}
     }
 
-    t.throws(() => new FooStore(), /Attempted to register action handler in FooStore. Handler for action foo.foo is already registered./, 
+    t.throws(() => new FooStore(), /Handler for action foo.foo is already registered. Attempted to register action handler in FooStore./, 
         'should throw error');
 
     t.end();

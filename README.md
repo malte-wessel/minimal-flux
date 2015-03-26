@@ -452,7 +452,7 @@ npm install
 # Change to one of the examples
 cd examples/<example>
 # Install and build the example
-npm run install
+npm install
 npm run build
 ````
 

@@ -10,9 +10,6 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import flux from '../flux.js';
-let serverActions = flux.actions.server;
-
 // !!! Please Note !!!
 // We are using localStorage as an example, but in a real-world scenario, this
 // would involve XMLHttpRequest, or perhaps a newer client-server protocol.
@@ -25,7 +22,8 @@ module.exports = {
     getAllMessages: function() {
         // simulate retrieving data from a database
         var rawMessages = JSON.parse(localStorage.getItem('messages'));
-
+        // Circular dependency
+        let serverActions = require('../flux.js').actions.server;
         // simulate success callback
         serverActions.receiveAll(rawMessages);
     },
@@ -46,6 +44,9 @@ module.exports = {
         };
         rawMessages.push(createdMessage);
         localStorage.setItem('messages', JSON.stringify(rawMessages));
+
+        // Circular dependency
+        let serverActions = require('../flux.js').actions.server;
 
         // simulate success callback
         setTimeout(function() {

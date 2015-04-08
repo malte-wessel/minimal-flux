@@ -312,9 +312,11 @@ Add an event listener. Stores emit a `change` event when `setState` is called.
 
 Remove an event listener.
 
-##### `Store.setState(state)`
+##### `Store.setState(state, options)`
 
 * `state` {Object} An object containing the state
+* `options` {Object}
+* `options.silent` {Boolean} If true, change event will not be emitted
 
 Set the store's state and emit a `change` event. Note: This will extend the current state with the passed state object.
 

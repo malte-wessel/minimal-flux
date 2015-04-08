@@ -182,3 +182,20 @@ test('Store: setState()', (t) => {
 
     t.end();
 });
+
+test('Store: setState() silent', (t) => {
+    let emitted = false;
+    
+    let store = new Store();
+    store.addListener('change', () => { emitted = true; });
+
+    store.setState({baz: 'baz'}, {silent: true});
+
+    t.deepEqual(store.getState(), {baz: 'baz'}, 
+        'should set state');
+
+    t.notOk(emitted, 
+        'should not emit change event');
+
+    t.end();
+});

@@ -43,11 +43,14 @@ export default class Store extends EventEmitter {
      * Set state
      * @param {Object} state State object
      */
-    setState(state) {
+    setState(state, options = {}) {
         if(!state) return;
         if(!this.state) this.state = {};
         this.state = assign({}, this.state, state);
-        this.emit('change', this.state);
+
+        if(options.silent !== true) {
+            this.emit('change', this.state);
+        }
     }
 
     /**

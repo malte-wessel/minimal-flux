@@ -51,7 +51,8 @@ export default class Dispatcher {
 
         // Run through stores and invoke registered handlers
         let stores = this._stores;
-        for (let key of this.order) {
+        for(let i = 0; i < this.order.length; i++) {
+            let key = this.order[i];
             let handlers = stores[key]._handlers;
             if(!handlers || !handlers[id]) continue;
             handlers[id](...args);
@@ -83,7 +84,8 @@ export default class Dispatcher {
                     typeof instance[prop] == 'function';
             });
             // Run through actual actions
-            for(let prop of props) {
+            for(let i = 0; i < props.length; i++) {
+                let prop = props[i];
                 // Bind function to instance
                 let fn = instance[prop] = instance[prop].bind(instance);
                 // The action id is composed from the actions key and its function name
@@ -123,7 +125,7 @@ export default class Dispatcher {
             if(!Array.isArray(store)) continue;
             let deps = store.slice(1) || [];
             // Add edges between store and it dependencies
-            for(let dep of deps) edges.push([key, dep]);
+            for(let i = 0; i < deps.length; i++) edges.push([key, deps[i]]);
         }
 
         // Topological sort, store the order
@@ -155,7 +157,8 @@ export default class Dispatcher {
                         (eventEmitterProperties.indexOf(prop) > -1 && prop !== 'emit'));
             });
             // Run through functions
-            for(let prop of props) {
+            for(let i = 0; i < props.length; i++) {
+                let prop = props[i];
                 // Bind function to the instance and add it to the decorated object
                 this.stores[key][prop] = instance[prop].bind(instance);
             }

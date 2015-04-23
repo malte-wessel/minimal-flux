@@ -5,8 +5,8 @@ import getAllPropertyNames from 'getallpropertynames';
 import Actions from './Actions';
 import Store from './Store';
 
+let allObjectProperties = getAllPropertyNames({});
 let allActionsProperties = getAllPropertyNames(Actions.prototype);
-let allStoreProperties = getAllPropertyNames(Store.prototype);
 let eventEmitterProperties = Object.keys(EventEmitter.prototype);
 
 export default class Dispatcher {
@@ -151,10 +151,11 @@ export default class Dispatcher {
             let props = getAllPropertyNames(instance).filter((prop) => {
                 // Only regard functions
                 return typeof instance[prop] === 'function' &&
-                    // Functions that start with get
-                    (prop.indexOf('get') === 0 || 
-                        // Event emitter function, except emit
-                        (eventEmitterProperties.indexOf(prop) > -1 && prop !== 'emit'));
+                    allObjectProperties.indexOf(prop) < 0 &&
+                        // Functions that start with get or is
+                        (prop.indexOf('get') === 0 || prop.indexOf('is') === 0 ||
+                            // Event emitter function, except emit
+                            (eventEmitterProperties.indexOf(prop) > -1 && prop !== 'emit'));
             });
             // Run through functions
             for(let i = 0; i < props.length; i++) {

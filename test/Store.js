@@ -58,7 +58,11 @@ test('Store: circular dependencies', (t) => {
 
 test('Store: decorators', (t) => {
 
-    class FooStore extends Store {}
+    class FooStore extends Store {
+        isFoo() {
+            return true;
+        }
+    }
 
     class BarStore extends FooStore {}
 
@@ -75,6 +79,12 @@ test('Store: decorators', (t) => {
 
     t.ok(typeof store.getState === 'function',
         'should expose getters');
+
+    t.ok(typeof store.isFoo === 'function',
+        'should expose `is` getters');
+
+    t.notOk(store.hasOwnProperty('isPrototypeOf'),
+        'should not expose object methods');
 
     t.ok(typeof store.addListener === 'function',
         'should expose event emitter methods');

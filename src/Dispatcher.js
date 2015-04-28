@@ -71,7 +71,10 @@ export default class Dispatcher {
         for(let key in actions) {
             let Actions = actions[key];
             // Make actions available at construction time
-            assign(Actions.prototype, { actions: this.actions });
+            assign(Actions.prototype, {
+                actions: this.actions,
+                stores: this.stores
+            });
             // Instantiate actions
             let instance = new Actions();
             // Create decorated actions object

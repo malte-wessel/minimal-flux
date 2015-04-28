@@ -1,5 +1,6 @@
 import test from 'tape';
 import Dispatcher from './../src/Dispatcher';
+import Store from './../src/Store';
 import Actions from './../src/Actions';
 
 let warnings = [];
@@ -71,6 +72,28 @@ test('Actions: decorators', (t) => {
 
     t.ok(typeof flux.actions.bar.foo === 'function', 
         'should decorate own actions');
+
+    t.end();
+});
+
+test('Actions: access stores', (t) => {
+    let storeResult = null;
+
+    class FooActions extends Actions {
+        foo() { storeResult = this.stores.foo; }
+    }
+
+    class FooStore extends Store {}
+
+    let flux = new Dispatcher({
+        actions: { foo: FooActions },
+        stores: { foo: FooStore }
+    });
+
+    flux.actions.foo.foo();
+
+    t.equal(storeResult, flux.stores.foo, 
+        'should make stores getters accessible from actions');
 
     t.end();
 });

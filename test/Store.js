@@ -9,16 +9,23 @@ test('Store: resolve stores', (t) => {
     let barStoreFoo;
 
     class FooStore extends Store {
-        constructor() { constructed.push('foo'); }
+        constructor() {
+            super();
+            constructed.push('foo');
+        }
     }
     class BarStore extends Store {
         constructor() {
+            super();
             constructed.push('bar');
             barStoreFoo = this.stores.foo;
         }
     }
     class BazStore extends Store {
-        constructor() { constructed.push('baz'); }
+        constructor() {
+            super();
+            constructed.push('baz'); 
+        }
     }
 
     let flux = new Dispatcher({
@@ -102,6 +109,7 @@ test('Store: handleAction()', (t) => {
 
     class FooStore extends Store {
         constructor() {
+            super();
             this.handleAction('foo.foo', this.handleFooFoo);
             this.handleAction('foo.bar', this.handleFooBar);
         }
@@ -136,6 +144,7 @@ test('Store: handleAction()', (t) => {
 test('Store: handleAction action does not exist', (t) => {
     class FooStore extends Store {
         constructor() {
+            super();
             this.handleAction('foo.foo', this.handleFooFoo);
         }
         handleFooFoo() {}
@@ -150,6 +159,7 @@ test('Store: handleAction action does not exist', (t) => {
 test('Store: handleAction handler is undefined', (t) => {
     class FooStore extends Store {
         constructor() {
+            super();
             this.handleAction('foo.foo', this.notimplemented);
         }
     }
@@ -163,6 +173,7 @@ test('Store: handleAction handler is undefined', (t) => {
 test('Store: handleAction handler already registered', (t) => {
     class FooStore extends Store {
         constructor() {
+            super();
             this.handleAction('foo.foo', this.handleFooFoo);
             this.handleAction('foo.foo', this.handleFooFoo2);
         }

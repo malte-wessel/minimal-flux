@@ -11,15 +11,24 @@ test('Dispatcher: dispatch', (t) => {
     }
 
     class FooStore extends Store {
-        constructor() { this.handleAction('foo.foo', this.handleFooFoo); }
+        constructor() { 
+            super();
+            this.handleAction('foo.foo', this.handleFooFoo);
+        }
         handleFooFoo() { handled.push('foo'); }
     }
     class BarStore extends Store {
-        constructor() { this.handleAction('foo.foo', this.handleFooFoo); }
+        constructor() {
+            super();
+            this.handleAction('foo.foo', this.handleFooFoo);
+        }
         handleFooFoo() { handled.push('bar'); }
     }
     class BazStore extends Store {
-        constructor() { this.handleAction('foo.foo', this.handleFooFoo); }
+        constructor() { 
+            super();
+            this.handleAction('foo.foo', this.handleFooFoo);
+        }
         handleFooFoo() { handled.push('baz'); }
     }
 
@@ -48,6 +57,7 @@ test('Dispatcher: dispatch while dispatching', (t) => {
 
     class FooStore extends Store {
         constructor() {
+            super();
             this.handleAction('foo.foo', () => flux.actions.foo.bar());
         }
     }

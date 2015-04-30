@@ -1,5 +1,5 @@
 import assign from 'object-assign';
-import { EventEmitter } from 'eventemitter3';
+import EventEmitter from 'eventemitter3';
 import toposort from 'toposort';
 import getAllPropertyNames from 'getallpropertynames';
 import Actions from './Actions';

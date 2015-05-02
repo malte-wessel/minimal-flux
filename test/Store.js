@@ -63,7 +63,7 @@ test('Store: circular dependencies', (t) => {
     t.end();
 });
 
-test('Store: decorators', (t) => {
+test('Store: wrapper', (t) => {
 
     class FooStore extends Store {
         isFoo() {

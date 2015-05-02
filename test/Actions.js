@@ -55,7 +55,7 @@ test('Actions: binding', (t) => {
     t.end();
 });
 
-test('Actions: decorators', (t) => {
+test('Actions: wrapper', (t) => {
     
     class FooActions extends Actions {
         foo() { this.dispatch('foo'); }
@@ -74,22 +74,22 @@ test('Actions: decorators', (t) => {
     });
 
     t.notOk(flux.actions.foo instanceof FooActions, 
-        'should decorate actions');
+        'should wrap actions');
 
     t.deepEqual(Object.keys(flux.actions.foo), ['foo', 'foo2'], 
-        'should decorate each action');
+        'should wrap each action');
 
     t.notOk(typeof flux.actions.foo.addListener === 'function', 
-        'should not decorate eventemitter functions');
+        'should not wrap eventemitter functions');
 
     t.notOk(flux.actions.bar instanceof BarActions, 
-        'should decorate actions');
+        'should wrap actions');
 
     t.ok(typeof flux.actions.bar.bar === 'function', 
-        'should decorate inherited actions');
+        'should wrap inherited actions');
 
     t.ok(typeof flux.actions.bar.foo === 'function', 
-        'should decorate own actions');
+        'should wrap own actions');
 
     t.end();
 });

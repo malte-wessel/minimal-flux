@@ -20,10 +20,10 @@ export default class Dispatcher {
      * @return {Dispatcher}
      */
     constructor(options) {
-        // Decorated actions
+        // Wrapped actions
         this.actions = {};
         this.actionIds = [];
-        // Decorated stores
+        // Wrapped stores
         this.stores = {};
         // Actual stores
         this._stores = {};
@@ -80,7 +80,7 @@ export default class Dispatcher {
 
             // Instantiate actions
             let instance = new ExtendedActions();
-            // Create decorated actions object
+            // Create wrapped actions object
             this.actions[key] = {};
             // Find actual action function
             let props = getAllPropertyNames(instance).filter((prop) => {
@@ -99,7 +99,7 @@ export default class Dispatcher {
                 this.actionIds.push(id);
                 // Listen to the action event
                 instance.addListener(prop, this.dispatch.bind(this, id));
-                // Add function to the decorated object
+                // Add function to the wrapped object
                 this.actions[key][prop] = fn;
             }
         }
@@ -152,9 +152,9 @@ export default class Dispatcher {
             // Instantiate the store
             let instance = new ExtendedStore();
             this._stores[key] = instance;
-            // Create a decorated stores object
+            // Create a wrapped stores object
             this.stores[key] = {};
-            // Find functions that will be added to the decorated object
+            // Find functions that will be added to the wrapped object
             let props = getAllPropertyNames(instance).filter((prop) => {
                 // Only regard functions
                 return typeof instance[prop] === 'function' &&
@@ -167,7 +167,7 @@ export default class Dispatcher {
             // Run through functions
             for(let i = 0; i < props.length; i++) {
                 let prop = props[i];
-                // Bind function to the instance and add it to the decorated object
+                // Bind function to the instance and add it to the wrapped object
                 this.stores[key][prop] = instance[prop].bind(instance);
             }
         }

@@ -2,6 +2,7 @@ import assign from 'object-assign';
 import EventEmitter from 'eventemitter3';
 import toposort from 'toposort';
 import getAllPropertyNames from 'getallpropertynames';
+import extend from './util/extend';
 import Actions from './Actions';
 import Store from './Store';
 
@@ -71,12 +72,14 @@ export default class Dispatcher {
         for(let key in actions) {
             let Actions = actions[key];
             // Make actions available at construction time
-            assign(Actions.prototype, {
+            let ExtendedActions = extend(Actions, {
+                key: key,
                 actions: this.actions,
                 stores: this.stores
             });
+
             // Instantiate actions
-            let instance = new Actions();
+            let instance = new ExtendedActions();
             // Create decorated actions object
             this.actions[key] = {};
             // Find actual action function
@@ -141,12 +144,13 @@ export default class Dispatcher {
             // Handle plain and array definition
             if(Array.isArray(Store)) Store = Store[0];  
             // Make stores available at construction time
-            assign(Store.prototype, {
+            let ExtendedStore = extend(Store, {
+                key: key,
                 stores: this.stores,
                 _actionIdExists: this.actionIdExists.bind(this)
             });
             // Instantiate the store
-            let instance = new Store();
+            let instance = new ExtendedStore();
             this._stores[key] = instance;
             // Create a decorated stores object
             this.stores[key] = {};

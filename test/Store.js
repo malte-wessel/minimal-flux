@@ -99,6 +99,25 @@ test('Store: decorators', (t) => {
     t.end();
 });
 
+
+test('Stores: create store key', (t) => {
+    let keyResult;
+
+    class FooStore extends Store {
+        constructor() {
+            super();
+            keyResult = this.key;
+        }
+    }
+
+    let flux = new Dispatcher({ stores: { foo: FooStore } });
+
+    t.equal(keyResult, 'foo',
+        'should assign actions key to actions prototype');
+
+    t.end();
+});
+
 test('Store: handleAction()', (t) => {
     let handled = [];
 

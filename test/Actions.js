@@ -21,6 +21,24 @@ test('Actions: create actions', (t) => {
     t.end();
 });
 
+test('Actions: create actions key', (t) => {
+    let keyResult;
+
+    class FooActions extends Actions {
+        constructor() {
+            super();
+            keyResult = this.key;
+        }
+    }
+
+    let flux = new Dispatcher({ actions: { foo: FooActions } });
+
+    t.equal(keyResult, 'foo',
+        'should assign actions key to actions prototype');
+
+    t.end();
+});
+
 test('Actions: binding', (t) => {
     let barContext;
     class FooActions extends Actions {

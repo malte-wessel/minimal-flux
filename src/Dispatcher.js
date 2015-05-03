@@ -83,7 +83,7 @@ export default class Dispatcher {
             // Create wrapped actions object
             this.actions[key] = {};
             // Find actual action function
-            let props = getAllPropertyNames(instance).filter((prop) => {
+            let props = getAllPropertyNames(Actions.prototype).filter((prop) => {
                 // Ignore the base class properties
                 return allActionsProperties.indexOf(prop) < 0 &&
                     // Only regard functions
@@ -155,7 +155,7 @@ export default class Dispatcher {
             // Create a wrapped stores object
             this.stores[key] = {};
             // Find functions that will be added to the wrapped object
-            let props = getAllPropertyNames(instance).filter((prop) => {
+            let props = getAllPropertyNames(Store.prototype).filter((prop) => {
                 // Only regard functions
                 return typeof instance[prop] === 'function' &&
                     allObjectProperties.indexOf(prop) < 0 &&

@@ -75,11 +75,13 @@ test('Store: wrapper', (t) => {
 
     let flux = new Dispatcher({
         stores: {
-            foo: FooStore
+            foo: FooStore,
+            bar: BarStore
         }
     });
 
     let store = flux.stores.foo;
+    let extendedStore = flux.stores.bar;
 
     t.notOk(typeof store.setState === 'function',
         'should not expose setters');
@@ -95,6 +97,12 @@ test('Store: wrapper', (t) => {
 
     t.ok(typeof store.addListener === 'function',
         'should expose event emitter methods');
+
+    t.ok(typeof extendedStore.getState === 'function',
+        'should expose inherited getters');
+
+    t.ok(typeof extendedStore.isFoo === 'function',
+        'should expose inherited getters');
 
     t.end();
 });

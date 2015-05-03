@@ -3,6 +3,7 @@ import EventEmitter from 'eventemitter3';
 import toposort from 'toposort';
 import getAllPropertyNames from 'getallpropertynames';
 import extend from './util/extend';
+import hasPrefix from './util/hasPrefix';
 import Actions from './Actions';
 import Store from './Store';
 
@@ -160,7 +161,7 @@ export default class Dispatcher {
                 return typeof instance[prop] === 'function' &&
                     allObjectProperties.indexOf(prop) < 0 &&
                         // Functions that start with get or is
-                        (prop.indexOf('get') === 0 || prop.indexOf('is') === 0 ||
+                        (hasPrefix(prop, 'get') || hasPrefix(prop, 'is') || hasPrefix(prop, 'has') ||
                             // Event emitter function, except emit
                             (eventEmitterProperties.indexOf(prop) > -1 && prop !== 'emit'));
             });

@@ -66,9 +66,10 @@ test('Store: circular dependencies', (t) => {
 test('Store: wrapper', (t) => {
 
     class FooStore extends Store {
-        isFoo() {
-            return true;
-        }
+        isFoo() { return true; }
+        hasFoo() { return true; }
+        getFoo() { return true; }
+        isolate() { return true; }
     }
 
     class BarStore extends FooStore {}
@@ -89,8 +90,17 @@ test('Store: wrapper', (t) => {
     t.ok(typeof store.getState === 'function',
         'should expose getters');
 
+    t.ok(typeof store.getFoo === 'function',
+        'should expose `get` getters');
+
     t.ok(typeof store.isFoo === 'function',
         'should expose `is` getters');
+
+    t.ok(typeof store.hasFoo === 'function',
+        'should expose `has` getters');
+
+    t.notOk(typeof store.isolate === 'function',
+        'should not expose inaccurate getters');
 
     t.notOk(store.hasOwnProperty('isPrototypeOf'),
         'should not expose object methods');

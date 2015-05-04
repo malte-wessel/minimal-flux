@@ -53,3 +53,59 @@ test('Flux: create actions and stores with super', (t) => {
 
     t.end();
 });
+
+test('Flux: dispatch event', (t) => {
+
+    let events = [];
+
+    class FooActions extends Actions {
+        foo(bar) { this.dispatch('foo', bar); }
+    }
+
+    let flux = new Flux({
+        actions: {foo: FooActions}
+    });
+
+    flux.addListener('dispatch', events.push.bind(events));
+    flux.actions.foo.foo('bar');
+
+    t.deepEqual(events, ['foo.foo', 'bar'],
+        'should forward dispatch event');
+
+    t.end();
+
+});
+
+test('Flux: error event', (t) => {
+
+    let events = [];
+
+    class FooActions extends Actions {
+        foo() { this.dispatch('foo'); }
+    }
+    class FooStore extends Store {
+        constructor() {
+            super();
+            this.handleAction('foo.foo', this.handleFooFoo);
+        }
+        handleFooFoo() {
+            bug();
+        }
+    }
+
+    let flux = new Flux({
+        actions: {foo: FooActions},
+        stores: {foo: FooStore}
+    });
+
+    flux.addListener('error', events.push.bind(events));
+
+    try {
+        flux.actions.foo.foo();
+    } catch (err) {
+        t.ok(events[0] instanceof Error,
+            'should forward error');
+         t.end();
+    }
+
+});

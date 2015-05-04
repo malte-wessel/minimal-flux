@@ -11,7 +11,7 @@ let allObjectProperties = getAllPropertyNames({});
 let allActionsProperties = getAllPropertyNames(Actions.prototype);
 let eventEmitterProperties = Object.keys(EventEmitter.prototype);
 
-export default class Dispatcher {
+export default class Dispatcher extends EventEmitter {
 
     /**
      * Constructor
@@ -21,6 +21,7 @@ export default class Dispatcher {
      * @return {Dispatcher}
      */
     constructor(options) {
+        super();
         // Wrapped actions
         this.actions = {};
         this.actionIds = [];
@@ -51,13 +52,21 @@ export default class Dispatcher {
 
         this._isDispatching = true;
 
+        this.emit('dispatch', id, ...args);
+
         // Run through stores and invoke registered handlers
         let stores = this._stores;
         for(let i = 0; i < this.order.length; i++) {
             let key = this.order[i];
             let handlers = stores[key]._handlers;
             if(!handlers || !handlers[id]) continue;
-            handlers[id](...args);
+            
+            try {
+                handlers[id](...args);
+            } catch(err) {
+                this.emit('error', err);
+                throw err;
+            }
         }
 
         this._isDispatching = false;

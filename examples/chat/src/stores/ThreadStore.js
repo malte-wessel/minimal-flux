@@ -3,7 +3,8 @@ import ChatMessageUtils from '../utils/ChatMessageUtils';
 
 export default class ThreadStore extends Store {
 
-    constructor(actions) {
+    constructor() {
+        super();
         this.setState({
             currentId: null,
             threads: {}

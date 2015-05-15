@@ -4,6 +4,7 @@ import Store from '../../../../src/Store';
 export default class TodoStore extends Store {
 
     constructor() {
+        super();
         this.handleAction('todos.wait', this.handleWait);
         this.handleAction('todos.completed', this.handleCompleted);
         this.handleAction('todos.failed', this.handleFailed);

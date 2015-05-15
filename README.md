@@ -240,10 +240,10 @@ import MessageStore from './MessageStore';
 // components or just pass it down the components tree via context.
 let flux = new Flux({
     actions: {
-        messages: MessagesActions
+        messages: MessageActions
     },
     stores: {
-        messages: MessagesStore
+        messages: MessageStore
     }
 });
 ````
@@ -434,10 +434,10 @@ class UnreadStore extends Store {
 
 let flux = new Flux({
     actions: {
-        messages: MessagesActions
+        messages: MessageActions
     },
     stores: {
-        messages: MessagesStore,
+        messages: MessageStore,
         // Since UnreadStore depends on MessageStore, 
         // we need to make sure that the MessageStore handles
         // the action first. This can be done by defining dependencies:

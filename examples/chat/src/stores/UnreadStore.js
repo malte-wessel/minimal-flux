@@ -2,7 +2,8 @@ import Store from '../../../../src/Store';
 
 export default class UnreadStore extends Store {
 
-    constructor(actions) {
+    constructor() {
+        super();
         this.setState({ count: null });
         this.handleAction('threads.clickThread', this.handleClickThread);
         this.handleAction('server.receiveAll', this.handleReceiveAll);

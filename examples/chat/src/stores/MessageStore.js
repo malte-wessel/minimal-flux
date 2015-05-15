@@ -3,7 +3,8 @@ import ChatMessageUtils from '../utils/ChatMessageUtils';
 
 export default class MessageStore extends Store {
 
-    constructor(actions) {
+    constructor() {
+        super();
         this.setState({messages: {}});
         this.handleAction('threads.clickThread', this.handleClickThread);
         this.handleAction('messages.createMessage', this.handleCreateMessage);

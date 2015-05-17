@@ -61,6 +61,10 @@ export default class Store extends EventEmitter {
         return this.state || {};
     }
 
+    getStateAsObject() {
+        return this.getState();
+    }
+
     /**
      * Check if action id exists
      * @return {Boolean}

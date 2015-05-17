@@ -13,17 +13,19 @@
   "homepage": "https://github.com/malte-wessel/minimal-flux",
   "scripts": {
     "build": "./node_modules/.bin/babel ./src --out-dir ./dist",
-    "test": "./node_modules/.bin/babel-node ./node_modules/.bin/tape test/*.js",
+    "test": "./node_modules/.bin/babel-node ./node_modules/.bin/tape \"test/src/**/*.js\"",
     "prepublish": "npm test && npm run build"
   },
   "author": "Malte Wessel <delabreak@gmail.com>",
   "license": "MIT",
   "devDependencies": {
-    "babel": "^5.1.13",
+    "babel": "^5.2.17",
+    "jsdom": "^5.3.0",
+    "react": "^0.13.2",
     "tape": "^3.5.0"
   },
   "dependencies": {
-    "eventemitter3": "^1.0.1",
+    "eventemitter3": "^1.0.2",
     "getallpropertynames": "^0.1.3",
     "object-assign": "^2.0.0",
     "toposort": "^0.2.10"
@@ -34,18 +36,5 @@
     "react",
     "flow",
     "unidirectional"
-  ],
-  "testling": {
-    "files": "test/*.js",
-    "browsers": [
-      "ie/8..latest",
-      "chrome/22..latest",
-      "firefox/16..latest",
-      "safari/latest",
-      "opera/11.0..latest",
-      "iphone/6",
-      "ipad/6",
-      "android-browser/latest"
-    ]
-  }
+  ]
 }

@@ -44,7 +44,6 @@ class FluxComponent extends React.Component {
     getChildContext() {
         let flux = this.getFlux();
         if (!flux) return {};
-        console.log('getChildContext', flux);
         return { flux };
     }
 

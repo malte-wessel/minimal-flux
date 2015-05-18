@@ -224,6 +224,24 @@ test('Store: handleAction handler already registered', (t) => {
     t.end();
 });
 
+test('Store: initialState', (t) => {
+
+    class ExtendedStore extends Store {
+        getInitialState() {
+            return {
+                foo: 'bar'
+            };
+        }
+    }
+        
+    let store = new ExtendedStore();
+   
+    t.deepEqual(store.getState(), { foo: 'bar' }, 
+        'should set state');
+
+    t.end();
+});
+
 test('Store: setState()', (t) => {
     let emitted = false;
     
@@ -254,6 +272,64 @@ test('Store: setState() silent', (t) => {
 
     t.notOk(emitted, 
         'should not emit change event');
+
+    t.end();
+});
+
+test('Store: setState() while dispatch', (t) => {
+    class FooActions extends Actions {
+        foo(foo) { this.dispatch('foo', foo); }
+    }
+
+    class FooStore extends Store {
+        constructor() {
+            super();
+            this.handleAction('foo.foo', this.handleFooFoo);
+        }
+        handleFooFoo(...args) {
+            this.setState({ foo: 'bar' });
+            this.setState({ bar: 'foo' });
+        }
+    }
+
+    let flux = new Dispatcher({
+        actions: { foo: FooActions },
+        stores: { foo: FooStore }
+    });
+
+    let n = 0;
+    flux.stores.foo.addListener('change', () => n++);
+
+    flux.actions.foo.foo();
+
+    console.log(flux.stores.foo.getState());
+
+    t.equal(n, 1,
+        'should emit once');
+
+    t.deepEqual(flux.stores.foo.getState(), { foo: 'bar', bar: 'foo' },
+        'should merge state');
+
+    t.end();
+});
+
+
+test('Store: replaceState()', (t) => {
+    class ExtendedStore extends Store {
+        getInitialState() {
+            return {
+                foo: 'bar'
+            };
+        }
+    }
+
+    let s = new ExtendedStore();
+
+    s.replaceState({ qux: 'baz' });
+
+    t.deepEqual(s.getState(), { qux: 'baz' });
+
+    console.log(s);
 
     t.end();
 });

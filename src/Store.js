@@ -155,7 +155,7 @@ export default class Store extends EventEmitter {
             this._pendingState = undefined;
 
             if(this._emitChangeAfterHandlingAction === true) {
-                this.emit('change');
+                this.emit('change', this.state);
             }
         }
 

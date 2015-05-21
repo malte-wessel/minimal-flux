@@ -5,12 +5,15 @@ import getAllPropertyNames from 'getallpropertynames';
 import extend from './util/extend';
 import hasPrefix from './util/hasPrefix';
 import Actions from './Actions';
-import Store from './Store';
 
 let allObjectProperties = getAllPropertyNames({});
 let allActionsProperties = getAllPropertyNames(Actions.prototype);
 let eventEmitterProperties = Object.keys(EventEmitter.prototype);
 
+/**
+ * @class Dispatcher
+ * @extends EventEmitter
+ */
 export default class Dispatcher extends EventEmitter {
 
     /**

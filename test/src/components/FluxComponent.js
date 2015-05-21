@@ -1,7 +1,7 @@
 import test from 'tape';
 import '../../util/browser';
-import React from 'react/addons';
-let { TestUtils } = React.addons;
+import React from 'react';
+import TestUtils from 'react/addons/TestUtils';
 
 import BaseFlux from '../../../src/Flux';
 import Store from '../../../src/Store';

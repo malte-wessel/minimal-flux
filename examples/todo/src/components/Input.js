@@ -1,10 +1,6 @@
 import React from 'react';
-import flux from '../flux';
 
-var todoActions = flux.actions.todos;
-var todoStore = flux.stores.todos;
-
-export default class Input extends React.Component {
+class Input extends React.Component {
 
     constructor(props) {
         super(props);
@@ -16,7 +12,7 @@ export default class Input extends React.Component {
     }
 
     onClickCreate() {
-        todoActions.create(this.state.value);
+        this.props.onClickCreate(this.state.value);
         this.setState({value: ''});
     }
 
@@ -28,5 +24,11 @@ export default class Input extends React.Component {
             </div>
         );
     }
-
 }
+
+
+Input.propTypes = {
+    onClickCreate: React.PropTypes.func
+};
+
+export default Input;

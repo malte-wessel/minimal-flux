@@ -4,32 +4,32 @@ import Store from '../../../../src/Store';
 export default class TodoStore extends Store {
 
     constructor() {
-        this.handleAction('todos.wait', this.handleWait);
-        this.handleAction('todos.completed', this.handleCompleted);
-        this.handleAction('todos.failed', this.handleFailed);
+        this.handleAction('todos.fetch', this.handleFetch);
+        this.handleAction('todos.fetchSuccess', this.handleFetchSuccess);
+        this.handleAction('todos.fetchError', this.handleFetchError);
         this.handleAction('todos.create', this.handleCreate);
         this.handleAction('todos.destroy', this.handleDestroy);
 
         this.setState({todos: []});
     }
 
-    handleWait() {
+    handleFetch() {
         this.setState({
             waiting: true
         });
     }
 
-    handleCompleted(todos) {
+    handleFetchSuccess(todos) {
         this.setState({
             todos: todos, 
-            waiting: undefined,
+            waiting: false,
             error: undefined
         });
     }
 
-    handleFailed(err) {
+    handleFetchError(err) {
         this.setState({
-            waiting: undefined, 
+            waiting: false, 
             error: err
         });
     }

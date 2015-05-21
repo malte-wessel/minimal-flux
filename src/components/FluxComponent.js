@@ -1,4 +1,5 @@
-import { default as React, PropTypes } from 'react/addons';
+import { default as React, PropTypes } from 'react';
+import cloneWithProps from 'react/addons/cloneWithProps';
 import Flux from '../Flux';
 import assign from 'object-assign';
 
@@ -26,11 +27,16 @@ class FluxComponent extends React.Component {
         let props = assign({}, this.state, actions);
         // Using deprecated cloneWithProps. With cloneElement, flux would be undefined
         // https://github.com/facebook/react/issues/3392
-        return React.addons.cloneWithProps(child, props);
+        return cloneWithProps(child, props);
     }
 
     render() {
-        let { children } = this.props;
+        let { children, render, actions, actionsGetter } = this.props;
+        
+        if (typeof render === 'function') {
+            return render(this.state, this.collectActions(actions, actionsGetter), this.getFlux());
+        }
+
         if (!children) return null;
 
         if (!Array.isArray(children)) {
@@ -204,6 +210,7 @@ FluxComponent.propTypes = {
     flux: PropTypes.instanceOf(Flux),
     stateGetter: React.PropTypes.func,
     actionsGetter: React.PropTypes.func,
+    render: React.PropTypes.func
 };
 
 

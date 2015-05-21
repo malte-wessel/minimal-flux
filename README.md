@@ -51,7 +51,7 @@ What about the dispatcher? Minimal-flux implements an own dispatcher under the h
 ````javascript
 import { Actions } from 'minimal-flux';
 
-class MessageActions extends Actions {
+export default class MessageActions extends Actions {
 
     // Create an action...
     create(message) {
@@ -67,9 +67,10 @@ class MessageActions extends Actions {
 ````javascript
 import { Store } from 'minimal-flux';
 
-class MessageStore extends Store {
+export default class MessageStore extends Store {
 
     constructor() {
+        super();
         // Set initial state
         this.state = { messages: [] };
         
@@ -100,14 +101,15 @@ import MessageStore from './MessageStore';
 // You can of course put this into an own file and require it inside your
 // components or just pass it down the components tree via context.
 let flux = new Flux({
-    actions: { messages: MessagesActions },
-    stores: { messages: MessagesStore },
+    actions: { messages: MessageActions },
+    stores: { messages: MessageStore },
 });
 
 // Use flux inside your components
-class Messages extends React.Component {
+export default class Messages extends React.Component {
 
-    constructor() {
+    constructor(props, context) {
+        super(props, context)
         this.setState = this.setState.bind(this);
 
         // Set the component's initial state.
@@ -238,10 +240,10 @@ import MessageStore from './MessageStore';
 // components or just pass it down the components tree via context.
 let flux = new Flux({
     actions: {
-        messages: MessagesActions
+        messages: MessageActions
     },
     stores: {
-        messages: MessagesStore
+        messages: MessageStore
     }
 });
 ````
@@ -432,10 +434,10 @@ class UnreadStore extends Store {
 
 let flux = new Flux({
     actions: {
-        messages: MessagesActions
+        messages: MessageActions
     },
     stores: {
-        messages: MessagesStore,
+        messages: MessageStore,
         // Since UnreadStore depends on MessageStore, 
         // we need to make sure that the MessageStore handles
         // the action first. This can be done by defining dependencies:

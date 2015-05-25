@@ -4,6 +4,8 @@ import Actions from '../../../../src/Actions';
 export default class TodoActions extends Actions {
 
     fetch() {
+        this.dispatch('fetch');
+        
         // Pretend web api call
         setTimeout(() => {
             var data = [
@@ -14,8 +16,6 @@ export default class TodoActions extends Actions {
             // Invoke complete action
             this.fetchSuccess(data);
         }, 500);
-
-        this.dispatch('fetch');
     }
 
     fetchSuccess(data) {

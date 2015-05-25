@@ -42,7 +42,7 @@ export default class TodoStore extends Store {
 
     handleDestroy(id) {
         var todos = this.getState().todos;
-        var todo = todos.filter((t) => t.id == id).shift();
+        var todo = todos.filter(t => t.id == id).shift();
         var idx = todos.indexOf(todo);
         if (idx > -1) todos.splice(idx, 1);
         this.setState({todos: todos});

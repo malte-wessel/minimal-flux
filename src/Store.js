@@ -77,7 +77,7 @@ export default class Store extends EventEmitter {
             prevState = this.getEmptyState();
         }
 
-        let nextState = this.assignState(prevState, state);
+        let nextState = this.assignState(prevState, state, options);
 
         if (this._isHandlingAction) {
             this._pendingState = nextState;
@@ -107,7 +107,7 @@ export default class Store extends EventEmitter {
      * @param  {Object} nextState
      * @return {Object}
      */
-    assignState(prevState, nextState) {
+    assignState(prevState, nextState, options) {
         return assign({}, prevState, nextState);
     }
 

@@ -1,6 +1,9 @@
 minimal-flux
 =========
 
+## Important: This Project is abandoned
+This project is abandoned, use [Redux](https://github.com/rackt/react-redux) instead.
+
 A lightweight implementation of Flux
 
 [![Travis](https://img.shields.io/travis/malte-wessel/minimal-flux.svg?style=flat-square)](https://travis-ci.org/malte-wessel/minimal-flux)

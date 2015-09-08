@@ -2,7 +2,7 @@ minimal-flux
 =========
 
 ## Important: This Project is abandoned
-This project is abandoned, use [Redux](https://github.com/rackt/react-redux) instead.
+This project is abandoned, use [Redux](https://github.com/rackt/redux) instead.
 
 A lightweight implementation of Flux
 
